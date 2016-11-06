@@ -1,0 +1,13 @@
+# -*- coding: utf8 -*-
+from wikitools import wiki
+# create a Wiki object
+site = wiki.Wiki("https://fr.wikipedia.org/w/api.php")
+# login - required for read-restricted wikis
+b = site.login("DickensBot", "AQWzsx123")
+en_site = wiki.Wiki("https://en.wikipedia.org/w/api.php")
+
+known_language = ["en", "es", "de"]
+def getKnownSite(l):
+	if l in known_language:
+		return wiki.Wiki("https://"+l+".wikipedia.org/w/api.php")
+	return None
