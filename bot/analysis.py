@@ -67,7 +67,6 @@ output2 = open("files/analysis2.txt", "a+")
 #output.write("|-\n")
 
 for p in tab:
-	print p
 	parseArticle(p,output2)
 	#parseArticle(p,output)
 	#output.write("|-\n")
