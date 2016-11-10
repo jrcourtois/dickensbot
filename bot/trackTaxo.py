@@ -1,9 +1,9 @@
 # -*- coding: utf8 -*-
-from lib.Site import site
-from  lib.Tools import printProgress
+from Site import site
+from  Tools import printProgress
 import re
 import time
-from lib.ProjectCategory import ProjectCategory
+from ProjectCategory import ProjectCategory
 from wikitools import Page
 
 

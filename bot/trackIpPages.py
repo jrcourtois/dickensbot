@@ -5,11 +5,11 @@ from wikitools import api
 from wikitools import pagelist
 from wikitools import Page
 from wikitools import Category
-from lib.Site import site
-from lib.Tools import printProgress
-from lib.Tools import setOrphan
-from lib.Tools import isOrphanCat
-from lib.OrphanPage import OrphanPage
+from Site import site
+from Tools import printProgress
+from Tools import setOrphan
+from Tools import isOrphanCat
+from OrphanPage import OrphanPage
 
 pageName = u"Projet:Maintenance/Analyse des créations sous IP"
 print pageName
