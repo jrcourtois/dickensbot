@@ -6,6 +6,8 @@ from OrphanPage import OrphanPage
 import Site
 import argparse
 from pprint import pprint
+from Tools import printProgress
+
 
 parser = argparse.ArgumentParser("To parse a category")
 parser.add_argument("catName")
@@ -14,6 +16,7 @@ args = parser.parse_args()
 catName = args.catName.decode("utf8")
 destFile = "files/" + args.d
 
+output = open(destFile,"a+")
 start = time.time()
 
 def parseArticle(p,output):
@@ -57,28 +60,10 @@ def parseArticle(p,output):
 
 cat = category.Category(Site.site,catName) 
 tab = cat.getAllMembers(True)
-
-#output = open(destFile,"a+")
-output2 = open("files/analysis2.txt", "a+")
-
-#output.write("==="+ catName.encode("utf8") + "===\n")
-#output.write("{|class='wikitable sortable'\n")
-#output.write("!Titre!!Nb links!!Nb pages traduites!!tpl !! en page !! de page !! es page !! models !! admissible\n")
-#output.write("|-\n")
-
+print "%s => %s" % (catName, destFile)
+l = len(tab)
+i=0
 for p in tab:
-	parseArticle(p,output2)
-	#parseArticle(p,output)
-	#output.write("|-\n")
-	
-#output.write("|}")
-
-#output.write(u"[[:".encode("utf8")+catName.encode("utf8")+"|Cat]]\n")
-#output.write("Total : " +str(len(tab)) + " articles\n")
-#output.close()
-#output2.close()
-
-#inputFile = open("files/analysis.wiki", "r")
-
-#p = Page(Site.site, "Utilisateur:DickensBot/Analysis")
-#p.edit(text = inputFile.read(), summary="New update with "+ catName,bot=True)
+	printProgress(i,l)
+	parseArticle(p,output)
+	i+=1
