@@ -2,7 +2,7 @@
 import Tools
 import re
 import time
-from lib.ModelPage import ModelPage
+from ModelPage import ModelPage
 import argparse
 import pprint
 
