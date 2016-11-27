@@ -32,15 +32,19 @@ birth_a = []
 death_a = []
 other_a = []
 
-params = {'action':'query', 'list':'search', 'srsearch':date, 'srlimit' : 50}
+params = {'action':'query', 'list':'search', 'srsearch':date, 'srlimit' : 100}
 request = api.APIRequest(site, params)
 result = request.query(False)
 snippets = {}
 i=0
+ignored = 0
 l = len(result['query']['search'])
 for p in result['query']['search']:
 	printProgress(i,l)
 	i+=1
+	if "onsult" in p['snippet']:
+		ignored += 1
+		continue
 	page = Page(site,p['title'])
 	snippets[p['title']] = re.sub("<.*?>", "", p['snippet'])
 	to_add = True
@@ -59,16 +63,18 @@ for p in result['query']['search']:
 print "{{Infobox Jour|%s|%s|%s}}" % (d,m,y)
 print
 print u"Le vendredi '''%s %s %s''' est le XXX{{e}} jour de l'année [[%s]]." % (d,m,y,y)
-print
-print "== Naissances =="
-for b in birth_a:
-	print "* '''[[%s]]''' (mort le XXX), " % b
-	print "<!-- %s -->" % snippets[b]
-print
-print "== Décès =="
-for b in death_a:
-	print u"* '''[[%s]]''' (né le XXX), " % b
-	print "<!-- %s -->" % snippets[b]
+if len(birth_a) > 0:
+	print
+	print "== Naissances =="
+	for b in birth_a:
+		print "* '''[[%s]]''', " % b
+		print "<!-- %s -->" % snippets[b]
+if len(death_a) > 0:
+	print
+	print "== Décès =="
+	for b in death_a:
+		print u"* '''[[%s]]''' (né le XXX), " % b
+		print "<!-- %s -->" % snippets[b]
 print
 print "== Autres événements =="
 for b in other_a:
@@ -77,7 +83,6 @@ for b in other_a:
 print
 print "== Voir aussi =="
 print "* [[%s %s]] et [[%s %s]]" % (d,m,m,y)
+print "<!-- %i ignores -->" % ignored
 print 
 print u"{{Portail|années %s}}" % (y[0:3] + "0")
-
-
