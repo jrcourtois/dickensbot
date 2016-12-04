@@ -18,7 +18,7 @@ class Analysis:
 		self.MODEL_NAME = "Utilisateur:DickensBot/Analysis"
 		self.MODEL_TOP = self.MODEL_NAME + "/top"
 		self.MODEL_BOTTOM = self.MODEL_NAME + "/bottom"
-		self.articles = urllib.urlopen("http://www.jrcourtois.net/wiki/analysis2.txt").readlines()
+		self.articles = urllib.urlopen("http://www.jrcourtois.net/wiki/last.arch").readlines()
 	
 	def getLinks(self, link):
 	   params = {'action':'query', 'eititle' : link, 'list':'embeddedin'}
