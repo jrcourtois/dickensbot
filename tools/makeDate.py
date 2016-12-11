@@ -83,6 +83,5 @@ for b in other_a:
 print
 print "== Voir aussi =="
 print "* [[%s %s]] et [[%s %s]]" % (d,m,m,y)
-print "<!-- %i ignores -->" % ignored
 print 
 print u"{{Portail|années %s}}" % (y[0:3] + "0")

@@ -7,6 +7,11 @@ import urllib
 
 SITE_JR = "http://www.jrcourtois.net/wiki/"
 
+print "Modeles"
+models = urllib.urlopen(SITE_JR + "models.wiki")
+modelPage = Page(site,"Utilisateur:DickensBot/Modeles")
+modelPage.edit(text = models.read(), summary = u"Mise à jour", bot=True)
+
 def printPageFromFile(page, fileName):
 	s = urllib.urlopen(SITE_JR + fileName)
 	if s.getcode() != 200:
@@ -24,8 +29,8 @@ def printPageFromFile(page, fileName):
 	p = Page(site, page + "/analysis")
 	p.edit(text = ret, summary=str(len(lines)) + " articles à adopter",bot=True)
 
-#a = Analysis(site)
-#a.run()
+a = Analysis(site)
+a.run()
 
 
 YEAR = [2013, 2014, 2015, 2016]
@@ -41,3 +46,6 @@ for y in YEAR:
 		fileName= u"tent_%d-%02d.arch" % (y, m)
 		printPageFromFile(catName, fileName)
 		m += 1
+
+
+
