@@ -15,7 +15,6 @@ modelPage.edit(text = models.read(), summary = u"Mise à jour", bot=True)
 def printPageFromFile(page, fileName):
 	s = urllib.urlopen(SITE_JR + fileName)
 	if s.getcode() != 200:
-		print "%s does not exist !" % fileName
 		return
 	lines = s.readlines()
 	print u"%s => %s" % (fileName,catName)
@@ -33,7 +32,7 @@ a = Analysis(site)
 a.run()
 
 
-YEAR = [2013, 2014, 2015, 2016]
+YEAR = [2013, 2014, 2015, 2016, 2017]
 MONTH = [u"janvier", u"février", u"mars", u"avril", u"mai", u"juin", u"juillet", u"août", u"septembre", u"octobre", u"novembre", u"décembre"]
 # orphelins 
 for y in YEAR:
