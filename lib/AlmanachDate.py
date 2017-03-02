@@ -21,7 +21,7 @@ class AlmanachDate :
 		if self.d == "1er":
 			self.d_num = 1
 		else:
-			self.d_num =self.d
+			self.d_num = int(self.d)
 
 		self.date = "%s %s %s" % (d, m, y)
 		day = datetime.date(self.y_num, self.m_num, self.d_num)
@@ -69,7 +69,7 @@ class AlmanachDate :
 
 	def getWikiPage(self):
 		ret = u"{{Création automatique|DickensBot}}\n"
-		ret+= "{{Infobox Jour|%s|%s|%s}}\n" % (self.d, self.m_num, self.y_num)
+		ret+= "{{Infobox Jour|%s|%s|%s}}\n" % (self.d_num, self.m_num, self.y_num)
 		ret+= "\n"
 		ret+= u"Le %s '''%s %s %s''' est le %d{{e}} jour de l'année [[%s]]." % (self.dow, self.d, self.m, self.y_num, self.doy, self.y_num)
 		ret+= "\n"
