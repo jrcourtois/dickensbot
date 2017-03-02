@@ -99,7 +99,7 @@ class ProjectCategory:
 			ret.append(page)
 		return ret
 
-	def __getOrphans(self):
+	def getOrphans(self):
 		self.orphLast = QuickIntersection([u"Article orphelin depuis " + self.date, self.portail]).getPages()
 		self.tentLast = QuickIntersection([u"Wikipédia:Tentative d'adoption en " + self.date, self.portail]).getPages()
 		self.adopt = []
@@ -130,8 +130,7 @@ class ProjectCategory:
 		return s.encode("utf8")
 
 	def getPageText(self):
-		s = self.getHeader()
-		s+= u"=== Articles orphelins ===\n"
+		s= u"=== Articles orphelins ===\n"
 		s+= u"{{adoption/orphelins|"+str(len(self.orph))+"}}\n"
 		s+= self.getPageArray(self.orph)
 		s+= u"==== Orphelins depuis ce mois-ci  ====\n"
@@ -198,15 +197,16 @@ class ProjectCategory:
 			self.oldText = ""
 			self.startCount = -1
 	def savePage(self):
-		self.__getOrphans()
+		self.getOrphans()
 		summary = "MAJ: " + str(self.getCount())
-		to = self.getPageText()
+		to = self.getHeader() + self.getPageText()
 		print summary + " - " + self.catName
-		t = self.getBotTxt(self.oldText, to).encode("utf8")
+		t = ProjectCategory.getBotTxt(self.oldText, to).encode("utf8")
 		print self.projectPage.title
 		self.projectPage.edit(text=t,summary = summary,bot=True)
 
-	def getBotTxt(self, fromTxt, toTxt):
+	@staticmethod
+	def getBotTxt(fromTxt, toTxt):
 		if fromTxt.find("<!-- BEGIN BOT SECTION -->")>-1:
 			t = re.sub(r"(.*\<\!\-\- BEGIN BOT SECTION \-\-\>).*(\<\!\-\- END BOT SECTION \-\-\>.*)",r"\1\n"+toTxt+r"\n\2", fromTxt, flags=re.S)
 			return t
