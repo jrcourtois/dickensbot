@@ -114,10 +114,14 @@ class ItlPage(Page):
 				aff = link[1]
 			else:
 				aff = link[0]
-			return u"{{lien|trad="+link[0]+u"|texte="+ aff + u"|lang="+self.lg+u"}}"
+			return getLinkLg(link[0], aff, self.lg)
+#			return u"{{lien|trad="+link[0]+u"|texte="+ aff + u"|langue="+self.lg+u"|fr=" + link[0] + u"}}"
 		except:
 			print "Probelm with: " + link[0]
 			return "[[" + oLink + "]]"
+
+def getLinkLg(enLink, texte, lguage):
+	return u"{{lien|langue=%s|trad=%s|fr=%s|texte=%s}}" % (lguage, enLink, enLink, texte)
 
 
 class EnglishModelPage(ItlPage):
@@ -140,13 +144,15 @@ class EnglishModelPage(ItlPage):
 				if  self.translatedLinks.has_key(m.group(1)):
 					text = text.replace(link, "[[" + self.translatedLinks[m.group(1)] + "|" + m.group(2) + "]]")
 				else:
-					text = text.replace(link, "{{lien|trad="+m.group(1)+"|texte="+m.group(2)+"|lang=en}}")
+					text = text.replace(link, getLinkLg(m.group(1), m.group(2),"en"))
+					#text = text.replace(link, "{{lien|trad="+m.group(1)+"|texte="+m.group(2)+"|lang=en|trad="+m.group(1)+u"}}")
 			else:
 				m = re.match(r"\[\[(.*?)\]\]", link)
 				if self.translatedLinks.has_key(m.group(1)):
 					text = text.replace(link, "[[" + self.translatedLinks[m.group(1)] + "]]")
 				else:
-					text = text.replace(link, "{{lien|trad="+m.group(1)+"|texte="+m.group(1)+"|lang=en}}")
+					text = text.replace(link, getLinkLg(m.group(1), m.group(1),"en"))
+					#text = text.replace(link, "{{lien|trad="+m.group(1)+"|texte="+m.group(1)+"|lang=en|trad="+m.group(1)+u"}}")
 
 		text = text.replace("Navbox", u"M\xe9ta palette de navigation")
 		text = text.replace("name", u"mod\xe8le")
