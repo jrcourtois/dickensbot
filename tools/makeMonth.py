@@ -46,7 +46,6 @@ for d in monthArray:
 		ret+= u"'''[[%s %s]]'''\n" % (d.d, m)
 		ret+= d.getDeaths()
 ret+= u"\n== Evènements ==\n"
-ret+= u"{{Catégorie détaillée|Naissance en %s %s}}\n" % (m,year) 
 for d in monthArray:
 	if d.hasOther() > 0:
 		ret+= u"'''[[%s %s]]'''\n" % (d.d, m)

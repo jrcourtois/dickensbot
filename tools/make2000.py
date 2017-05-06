@@ -8,8 +8,6 @@ from wikitools import NoPage
 from wikitools import category
 from Site import site
 from Tools import printProgress
-from AlmanachDate import AlmanachDate, AlmanachMonth
-import datetime 
 import argparse
 
 
