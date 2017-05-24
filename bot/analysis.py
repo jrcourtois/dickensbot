@@ -60,7 +60,7 @@ def parseArticle(p,output):
 
 cat = category.Category(Site.site,catName) 
 tab = cat.getAllMembers(True)
-print "%s => %s" % (catName, destFile)
+#print "%s => %s" % (catName, destFile)
 l = len(tab)
 i=0
 for p in tab:
