@@ -113,3 +113,10 @@ def appendCat(page, cat, key):
 		else:
 			catTxt = u"\n[[Catégorie:"+catKey+"]]\n"
 		page.edit(appendtext=catTxt.encode("utf8"), summary = u"[bot] Ajout de la catégorie : [["+cat+"]]".encode("utf8"), bot=True)
+
+def setOrphanIfNeeded(p):
+	cat = p.getCategories()
+	if ( not isOrphanCat(cat)):
+		setOrphan(p)
+		return 1
+	return 0
