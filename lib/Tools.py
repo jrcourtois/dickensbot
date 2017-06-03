@@ -1,7 +1,6 @@
 # -*- coding: utf8 -*-
 from wikitools import Page
 from wikitools import api
-from pprint import pprint
 import re
 import urllib
 import time
@@ -54,20 +53,23 @@ def printProgress(indice, top):
 	sys.stdout.write("Progress: %g %%   \r" % (progress) )
 	sys.stdout.flush()
 
-def addPalette(page,title):
+def addPalette(page, title, adopt = False):
 	txt = page.getWikiText().decode("utf8")
 	match = re.search(r"\{\{[P|p]alette.(.+?)\}\}", txt) 
 	if match:
 		for elem in match.group(1).split("|"):
-			if re.match(r"" + title+ r"$",elem):
-				print "deja la"
+			if re.match(ur"" + title + r"$",elem) or elem == title:
+				print ("deja la")
 				return
 		txt = re.sub(r"\{\{([P|p]alette).(.*)\}\}", r"{{\1|\2|"+title+"}}",txt)
 	else:
 		if re.search(r"\{\{[P|p]ortail.*\}\}", txt):
 			txt = re.sub(r"(\{\{[P|p]ortail.*\}\})", "{{Palette|"+title+"}}\n" + r"\1",txt)
 		else:
-			print "pas de portail"
+			print ("pas de portail")
+	if (adopt):
+		txt = re.sub(r"\{\{[O|o]rph.*?\}\}\n?", "", txt)
+
 	commentaire = "Ajout de la palette: ''"+ title + "''"
 	page.edit(txt.encode("utf8"), summary=commentaire.encode("utf8"),bot=True)
 
@@ -102,7 +104,7 @@ def setOrphan(p):
 def appendCat(page, cat, key):
 	cats = page.getCategories()
 	if not isFromCat(cats, cat):
-		print page.title
+		print (page.title)
 		txt = page.getWikiText()
 		if key:
 			catKey = cat + "|" + key
