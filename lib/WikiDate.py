@@ -100,6 +100,8 @@ class WikiDate :
 
 	def _getDate(self, date):
 		(y,m,d) = date.split("T")[0].split("-")
+		if (d == 'XX') : 
+			return 'date inconnue'
 		return "le " + self._getStringDate(int(d), int(m), int(y))
 
 	def _getSiteLine(self, elem, date, switch):
