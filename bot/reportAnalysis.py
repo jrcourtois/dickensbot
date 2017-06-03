@@ -40,10 +40,16 @@ for y in YEAR:
 	for mon in MONTH:
 		catName = u"Catégorie:Article orphelin depuis %s %d" %(mon, y)
 		fileName= u"orph_%d-%02d.arch" % (y, m)
-		printPageFromFile(catName, fileName)
+		try:
+			printPageFromFile(catName, fileName)
+		except:
+			print "problem with %s" % catName
 		catName = u"Catégorie:Wikipédia:Tentative d'adoption en %s %d" %(mon, y)
 		fileName= u"tent_%d-%02d.arch" % (y, m)
-		printPageFromFile(catName, fileName)
+		try:
+			printPageFromFile(catName, fileName)
+		except:
+			print "problem with %s" % catName
 		m += 1
 
 
