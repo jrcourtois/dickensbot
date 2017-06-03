@@ -226,18 +226,22 @@ class DeutschModelPage(ItlPage):
 #		text = re.sub(r"^\s*|\s*$", "", text,flags=re.MULTILINE)
 		return text
 
+DONTLINK = [u"Siège du comté", "Iowa"]
 
 class ModelPage(Page):
 	def __init__(self, title):
 		Page.__init__(self, Site.site, title)
 		self.name = re.sub(".*Palette ", "", self.title)
-		print self.name
 
 	def parseLinks(self):
-		print self
+		print self.name
+		adopt = self.getLinks() > 3
 		for p in self.getLinks():
+			if p in DONTLINK:
+				print "%s not LINKED" % p
+				continue
 			page = Page(Site.site, p)
 			if page.exists and page.namespace == 0:
 				print p
-				Tools.addPalette(page,self.name)
+				Tools.addPalette(page,self.name, adopt)
 	
