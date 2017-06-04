@@ -5,7 +5,6 @@ from wikitools import Page
 from OrphanPage import OrphanPage
 import Site
 import argparse
-from pprint import pprint
 from Tools import printProgress
 
 
@@ -13,7 +12,7 @@ parser = argparse.ArgumentParser("To parse a category")
 parser.add_argument("catName")
 parser.add_argument("-d", default="analysis.wiki")
 args = parser.parse_args()
-catName = args.catName.decode("utf8")
+catName = args.catName
 destFile = "files/" + args.d
 
 output = open(destFile,"a+")
@@ -24,7 +23,7 @@ def parseArticle(p,output):
 	o = OrphanPage(p)
 	o.getFrenchPages()
 	# titre
-	output.write("| [[" + p.encode("utf8") + "]] ")
+	output.write("| [[" + p + "]] ")
 	# nb page linked
 	output.write("|| " + str(o.getNbLinks()))
 	# nb pages traduites
@@ -33,9 +32,9 @@ def parseArticle(p,output):
 	output.write("|| ")
 	for m in o.itlPages:
 		try:
-			output.write("[[:"+m.lg+":"+m.title.encode("utf8")+"|"+m.lg+"]] :" + str(len(m.frenchLinks)) + "/" + str(len(m.getLinks())) +  "<br>")
+			output.write("[[:"+m.lg+":"+m.title+"|"+m.lg+"]] :" + str(len(m.frenchLinks)) + "/" + str(len(m.getLinks())) +  "<br>")
 		except:
-			pprint ("error parsing: " + m.title)
+			print ("error parsing: " + m.title)
 	# en page
 	i = 0
 	for l in ["en", "de", "es"]:
