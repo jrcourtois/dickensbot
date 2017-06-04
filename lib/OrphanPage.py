@@ -5,10 +5,9 @@ import Site
 from ModelPage import ItlPage
 from wikitools import api
 import Tools
-from pprint import pprint
 
-adm = u"Catégorie:Tous les articles dont l'admissibilité est à vérifier"
-homo = u"Catégorie:Homonymie"
+adm = "Catégorie:Tous les articles dont l'admissibilité est à vérifier"
+homo = "Catégorie:Homonymie"
 class OrphanPage(Page):
 	"""An orphan page"""
 
@@ -24,7 +23,7 @@ class OrphanPage(Page):
 		self.itlModels = {}
 		self.itlLinks = {}
 		for p in result['query']['pages']:
-			if result['query']['pages'][p].has_key('langlinks'):
+			if 'langlinks' in list(result['query']['pages'][p].keys()):
 				self.interwikiLinks = result['query']['pages'][p]['langlinks']
 		for l in self.interwikiLinks:
 			s = Site.getKnownSite(l['lang'])
@@ -34,15 +33,16 @@ class OrphanPage(Page):
 				self.itlModels[l['lang']] = self.__getLinks(s, l['*'], '10')
 
 	def toAdopt(self):
+		print (("%s has %d links" % (self.title, self.getNbLinks())))
 		try:
 			if self.getNbLinks() > 2:
 				return True
 			if self.isHomo():
-				print self.title.decode("utf8") + u" is an homonyme page"
+				print((self.title.decode("utf8") + " is an homonyme page"))
 				return True
-		except NoPage, e:
-			print "No page found"
-			pprint(self.title)
+		except NoPage as e:
+			print("No page found")
+			print((self.title))
 		return False
 
 	def getNbItlModels(self):
@@ -58,14 +58,17 @@ class OrphanPage(Page):
 		return len(self.itlLinks)
 	def getNbLinks(self):
 		return self.nblinks
+
 	def __getNbLinks(self, site, l):
-		params = {'action':'query', 'bltitle' : l, 'list':'backlinks','blnamespace':'0', 'blfilterredir':'all'}
+		if not type(l) is str:
+			l = l.decode('utf8')
+		params = {'action' : 'query', 'bltitle' : l, 'list' : 'backlinks', 'blnamespace' : '0', 'blfilterredir':'all'}
 		r = api.APIRequest(site,params)
 		result = r.query(False)
 		pages = {}
 		for p in result['query']['backlinks']:
-			if "redirect" in p.keys():
-				if "redirlinks" in p.keys():
+			if "redirect" in list(p.keys()):
+				if "redirlinks" in list(p.keys()):
 					for r in p["redirlinks"]:
 						pages[r["pageid"]] = True
 			else:
@@ -73,6 +76,8 @@ class OrphanPage(Page):
 		return len(pages)
 			
 	def __getLinks(self, site, l, ns):
+		if not type(l) is str:
+			l = l.decode('utf8')
 		params = {'action':'query', 'bltitle' : l, 'list':'backlinks','blnamespace':ns, 'blfilterredir':'nonredirects'}
 		r = api.APIRequest(site,params)
 		result = r.query(False)

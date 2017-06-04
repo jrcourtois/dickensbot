@@ -8,9 +8,9 @@ from wikitools import Page
 
 
 def parseTaxo(t):
-	print t
-	projet = Page(site, u"Projet:" + t  + "/Articles orphelins")
-	lines = projet.getWikiText().split("\n")
+	print(t)
+	projet = Page(site, "Projet:" + t  + "/Articles orphelins")
+	lines = projet.getWikiText().decode("utf8").split("\n")
 	allCats = {}
 
 	res = ""
@@ -26,9 +26,9 @@ def parseTaxo(t):
 				p += " (T)"
 		res += p + "\n"
 
-	projet.edit(text=res, summary=u"bot: ajout des pages taxoboxées", bot=True)
+	projet.edit(text=res, summary="bot: ajout des pages taxoboxées", bot=True)
 
-parseTaxo(u"Biologie cellulaire et moléculaire")
+parseTaxo("Biologie cellulaire et moléculaire")
 parseTaxo("Biologie")
 parseTaxo("Botanique")
 parseTaxo("Zoologie")
