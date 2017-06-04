@@ -34,7 +34,7 @@ def parseArticle(p,output):
 		try:
 			output.write("[[:"+m.lg+":"+m.title+"|"+m.lg+"]] :" + str(len(m.frenchLinks)) + "/" + str(len(m.getLinks())) +  "<br>")
 		except:
-			print ("error parsing: " + m.title)
+			print(("error parsing: " + m.title))
 	# en page
 	i = 0
 	for l in ["en", "de", "es"]:
