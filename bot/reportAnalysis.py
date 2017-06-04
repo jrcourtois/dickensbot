@@ -43,7 +43,7 @@ MONTH = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "aoû
 for y in YEAR:
 	m =1
 	for mon in MONTH:
-		catName = u"Catégorie:Article orphelin depuis %s %d" %(mon, y)
+		catName = "Catégorie:Article orphelin depuis %s %d" %(mon, y)
 		fileName= "orph_%d-%02d.arch" % (y, m)
 		catName = "Catégorie:Wikipédia:Tentative d'adoption en %s %d" %(mon, y)
 		fileName= "tent_%d-%02d.arch" % (y, m)
