@@ -8,19 +8,19 @@ from wikitools import category
 from Site import site
 
 
-MONTH = [u"janvier", u"février", u"mars", u"avril", u"mai", u"juin", u"juillet", u"août", u"septembre", u"octobre", u"novembre", u"décembre"]
+MONTH = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"]
 
 WEEK = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"]
 
 URL = 'https://query.wikidata.org/bigdata/namespace/wdq/sparql'
 
 DICTIONNARY = {
-	'P571' : u"Création de %s",
-	'P575' : u"Découverte de %s",
-	'P577' : u"Publication de ''%s''",
-	'P580' : u"Début de %s",
-	'P582' : u"Fin de %s",
-	'P585' : u"%s"
+	'P571' : "Création de %s",
+	'P575' : "Découverte de %s",
+	'P577' : "Publication de ''%s''",
+	'P580' : "Début de %s",
+	'P582' : "Fin de %s",
+	'P585' : "%s"
 	}
 
 QUERY_GAL = '''PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
@@ -35,8 +35,8 @@ SELECT ?s ?sLabel ?code ?sDescription ?sitelink ?born ?death ?sex WHERE {
 }
 ORDER BY ?sitelink'''
 
-BORN_SWITCH = [u"né", u"née"]
-DEAD_SWITCH = [u"mort", u"morte"]
+BORN_SWITCH = ["né", "née"]
+DEAD_SWITCH = ["mort", "morte"]
 
 class WikiDate :
 	def __init__(self, d, m, y):
@@ -47,7 +47,7 @@ class WikiDate :
 		self.month = MONTH[m-1]
 		self.date = self._getStringDate(d, m, y)
 		self.languages = []
-		print self.date
+		print(self.date)
 		day = datetime.date(y, m, d)
 		self.dow = WEEK[day.timetuple().tm_wday]
 		self.doy = day.timetuple().tm_yday
@@ -59,7 +59,7 @@ class WikiDate :
 
 
 	def _getArray(self, query):
-		print query
+		print(query)
 		data = requests.get(URL, params={'query': query, 'format': 'json'}).json()
 		born = {}
 		keys = []
@@ -68,7 +68,7 @@ class WikiDate :
 			if key not in born:
 				born[key] = {}
 				born[key]['birth'] = "XXXX-XX-XX"
-				born[key]['desc'] = u"personnalité XXXXX"
+				born[key]['desc'] = "personnalité XXXXX"
 				if 'born' in item  :
 					born[key]['birth'] = item['born']['value']
 				if 'death' in item  :
@@ -111,7 +111,7 @@ class WikiDate :
 
 		link = self._getLink(elem)
 		if 'link' != "":
-				return u"* '''%s'''%s, %s\n" % (link, sdate, elem['desc'])
+				return "* '''%s'''%s, %s\n" % (link, sdate, elem['desc'])
 		return ""
 
 	def _getLink(sefl, elem):
@@ -119,11 +119,11 @@ class WikiDate :
 			if elem['site'] == elem['sLabel']:
 				return "[[%s]]" % (elem['site'])
 			else:
-				return u"[[%s|%s]]" % (elem['site'], elem['sLabel'])
+				return "[[%s|%s]]" % (elem['site'], elem['sLabel'])
 		else:
 			for lg in self.languages:
 				if lg in elem:
-					return u"{{lien|trad=%s|texte=%s|langue=%s}}" % (elem[lg], elem['sLabel'], lg)
+					return "{{lien|trad=%s|texte=%s|langue=%s}}" % (elem[lg], elem['sLabel'], lg)
 		return ""
 	
 
@@ -142,7 +142,7 @@ class WikiDate :
 			if (self.allDatas[t]['code'] == 'P570'):
 				ret += self.getDeathLine(self.allDatas[t])
 		if ret != "":
-			return 	u"\n== Décès ==\n" + ret
+			return 	"\n== Décès ==\n" + ret
 		return ret
 
 	def getAllBirth(self):
@@ -151,7 +151,7 @@ class WikiDate :
 			if (self.allDatas[t]['code'] == 'P569'):
 				ret += self.getBirthLine(self.allDatas[t])
 		if ret != "":
-			return 	u"\n== Naissances ==\n" + ret
+			return 	"\n== Naissances ==\n" + ret
 		return ret
 
 	def getOtherEvents(self):
@@ -165,14 +165,14 @@ class WikiDate :
 				if code not in self.unknown:
 					self.unknown.append(code)
 		if ret != "":
-			return 	u"\n== Événements ==\n" + ret
+			return 	"\n== Événements ==\n" + ret
 		return ret
 
 	def getWikiPage(self):
-		ret = u"{{Création automatique|DickensBot}}\n"
+		ret = "{{Création automatique|DickensBot}}\n"
 		ret+= "{{Infobox Jour|%s|%s|%s}}\n" % (self.d, self.m, self.y)
 		ret+= "\n"
-		ret+= u"Le %s '''%s''' est le %d{{e}} jour de l'année [[%s]]." % (self.dow, self.date, self.doy, self.y)
+		ret+= "Le %s '''%s''' est le %d{{e}} jour de l'année [[%s]]." % (self.dow, self.date, self.doy, self.y)
 		ret+= "\n"
 		ret+= self.getAllBirth()
 		ret+= self.getAllDeath()
@@ -181,8 +181,8 @@ class WikiDate :
 		ret+= "\n== Voir aussi ==\n"
 		ret+= "* [[%s %s]] et [[%s %s]]\n" % (self.d,self.month,self.month,self.y)
 		 
-		ret+= u"\n{{Portail|années %s}}\n" % (self.decade)
+		ret+= "\n{{Portail|années %s}}\n" % (self.decade)
 
-		print self.unknown
+		print(self.unknown)
 
 		return ret

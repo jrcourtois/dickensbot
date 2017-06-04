@@ -19,7 +19,7 @@ year = args.year
 
 almDay = WikiDate(int(d), int(m), int(year))
 
-print((almDay.getWikiPage()))
+print(almDay.getWikiPage())
 
 p = Page(site, almDay.date)
 
