@@ -2,54 +2,52 @@
 from Analysis import Analysis
 from wikitools import Page
 from Site import site
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 
 SITE_JR = "http://www.jrcourtois.net/wiki/"
 
-print "Modeles"
-models = urllib.urlopen(SITE_JR + "models.wiki")
+print("Modeles")
+models = urllib.request.urlopen(SITE_JR + "models.wiki")
 modelPage = Page(site,"Utilisateur:DickensBot/Modeles")
-modelPage.edit(text = models.read(), summary = u"Mise à jour", bot=True)
+
+modelPage.edit(text = models.read().decode("utf8"), summary = "Mise à jour", bot=True)
 
 def printPageFromFile(page, fileName):
-	s = urllib.urlopen(SITE_JR + fileName)
+	try:
+		s = urllib.request.urlopen(SITE_JR + "arch/" + fileName)
+	except urllib.error.HTTPError as e:
+		print (e)
+		return
 	if s.getcode() != 200:
 		return
 	lines = s.readlines()
-	print u"%s => %s" % (fileName,catName)
+	print(("%s => %s" % (fileName,catName)))
 	ret = "{|class='wikitable sortable'\n"
 	ret += "!Titre!!Nb links!!Nb pages traduites!!tpl !! en page !! de page !! es page !! models !! admisssible \n"
 	for l in lines:
 		ret += "|-\n"
-		ret += l
+		ret += l.decode("utf8")
 	ret +="|-\n"
 	ret+= "|}"
 	p = Page(site, page + "/analysis")
-	p.edit(text = ret, summary=str(len(lines)) + " articles à adopter",bot=True)
+	p.edit(text = ret, summary=str(len(lines)) + " articles à adopter", bot=True)
 
 a = Analysis(site)
 a.run()
 
 
-YEAR = [2013, 2014, 2015, 2016, 2017]
-MONTH = [u"janvier", u"février", u"mars", u"avril", u"mai", u"juin", u"juillet", u"août", u"septembre", u"octobre", u"novembre", u"décembre"]
+YEAR = [2014, 2015, 2016, 2017]
+MONTH = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"]
 # orphelins 
 for y in YEAR:
 	m =1
 	for mon in MONTH:
 		catName = u"Catégorie:Article orphelin depuis %s %d" %(mon, y)
-		fileName= u"orph_%d-%02d.arch" % (y, m)
-		try:
-			printPageFromFile(catName, fileName)
-		except:
-			print "problem with %s" % catName
-		catName = u"Catégorie:Wikipédia:Tentative d'adoption en %s %d" %(mon, y)
-		fileName= u"tent_%d-%02d.arch" % (y, m)
-		try:
-			printPageFromFile(catName, fileName)
-		except:
-			print "problem with %s" % catName
+		fileName= "orph_%d-%02d.arch" % (y, m)
+		catName = "Catégorie:Wikipédia:Tentative d'adoption en %s %d" %(mon, y)
+		fileName= "tent_%d-%02d.arch" % (y, m)
+		printPageFromFile(catName, fileName)
 		m += 1
 
 
