@@ -28,33 +28,33 @@ for i in range(2,32):
 		aDay.parseAndCompare(month)
 		aDay.printSummary()
 	except:
-		print "No %s %s %s" % (i, m, year)
+		print(("No %s %s %s" % (i, m, year)))
 
 		
-ret = u"{{Création automatique|DickensBot}}\n"
-ret+= u"{{Infobox Mois|%s|%s}}\n" % (month.getNum(),year)
-ret+= u"\n== Naissances ==\n"
-ret+= u"{{Catégorie détaillée|Naissance en %s %s}}\n" % (m,year) 
+ret = "{{Création automatique|DickensBot}}\n"
+ret+= "{{Infobox Mois|%s|%s}}\n" % (month.getNum(),year)
+ret+= "\n== Naissances ==\n"
+ret+= "{{Catégorie détaillée|Naissance en %s %s}}\n" % (m,year) 
 for d in monthArray:
 	if len(d.birthArray) > 0:
-		ret+= u"'''[[%s %s]]'''\n" % (d.d, m)
+		ret+= "'''[[%s %s]]'''\n" % (d.d, m)
 		ret+= d.getBirths()
-ret+= u"\n== Décès ==\n"
-ret+= u"{{Catégorie détaillée|Décès en %s %s}}\n" % (m,year) 
+ret+= "\n== Décès ==\n"
+ret+= "{{Catégorie détaillée|Décès en %s %s}}\n" % (m,year) 
 for d in monthArray:
 	if len(d.deathArray) > 0:
-		ret+= u"'''[[%s %s]]'''\n" % (d.d, m)
+		ret+= "'''[[%s %s]]'''\n" % (d.d, m)
 		ret+= d.getDeaths()
-ret+= u"\n== Evènements ==\n"
+ret+= "\n== Evènements ==\n"
 for d in monthArray:
 	if d.hasOther() > 0:
-		ret+= u"'''[[%s %s]]'''\n" % (d.d, m)
+		ret+= "'''[[%s %s]]'''\n" % (d.d, m)
 		ret+= d.getAll()
 
-ret+= u"\n== Voir aussi ==\n"
-ret+= u"\n{{Portail|années %s}}" % (year[0:3] + "0")
+ret+= "\n== Voir aussi ==\n"
+ret+= "\n{{Portail|années %s}}" % (year[0:3] + "0")
 
 date = "%s %s" % (m, year)
 
 p = Page(site, date)
-p.edit(text = ret.encode("utf8"), summary=u"Créé par un bot, merci de compléter",bot=True)
+p.edit(text = ret, summary="Créé par un bot, merci de compléter", bot=True)
