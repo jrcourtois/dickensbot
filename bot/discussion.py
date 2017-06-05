@@ -1,5 +1,5 @@
 # -*- coding: utf8 -*-
-from wikitools import Page
+from wikitools.page import Page
 from Site import site
 import Tools
 import re

@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-
 from wikitools import category
 import time
-from wikitools import Page
+from wikitools.page import Page
 from OrphanPage import OrphanPage
 import Site
 import argparse

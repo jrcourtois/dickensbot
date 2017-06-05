@@ -1,7 +1,7 @@
 # -*- coding: utf8 -*-
 from ModelPage import EnglishModelPage
 from ModelPage import ModelPage
-from wikitools import Page
+from wikitools.page import Page
 from Site import site
 import argparse
 

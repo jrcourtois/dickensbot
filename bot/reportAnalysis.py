@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
 from Analysis import Analysis
-from wikitools import Page
+from wikitools.page import Page
 from Site import site
 import urllib.request, urllib.parse, urllib.error
 
@@ -8,8 +8,12 @@ import urllib.request, urllib.parse, urllib.error
 SITE_JR = "http://www.jrcourtois.net/wiki/"
 
 print("Modeles")
-models = urllib.request.urlopen(SITE_JR + "models.wiki")
-modelPage = Page(site,"Utilisateur:DickensBot/Modeles")
+try:
+	models = urllib.request.urlopen(SITE_JR + "models.wiki")
+	modelPage = Page(site,"Utilisateur:DickensBot/Modeles")
+except urllib.error.HTTPError as e:
+	print "models.wiki was missing"
+
 
 modelPage.edit(text = models.read().decode("utf8"), summary = "Mise à jour", bot=True)
 
@@ -17,7 +21,7 @@ def printPageFromFile(page, fileName):
 	try:
 		s = urllib.request.urlopen(SITE_JR + "arch/" + fileName)
 	except urllib.error.HTTPError as e:
-		print (e)
+		print("File not found: %s" % fileName)
 		return
 	if s.getcode() != 200:
 		return

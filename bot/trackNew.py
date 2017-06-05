@@ -1,6 +1,5 @@
 # -*- coding: utf8 -*-
 from Site import site
-import pprint
 from wikitools import api
 from OrphanPage import OrphanPage
 import Tools

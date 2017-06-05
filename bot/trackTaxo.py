@@ -2,9 +2,7 @@
 from Site import site
 from  Tools import printProgress
 import re
-import time
-from ProjectCategory import ProjectCategory
-from wikitools import Page
+from wikitools.page import Page
 
 
 def parseTaxo(t):

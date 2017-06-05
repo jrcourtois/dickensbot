@@ -1,5 +1,5 @@
 # -*- coding: utf8 -*-
-from wikitools import Category
+from wikitools.category import Category
 import Site
 from OrphanPage import OrphanPage
 import argparse
@@ -32,25 +32,25 @@ for p in tab:
 	if page.getNbLinks()==2:
 		orphan2.append(p)
 		
-print "== Orphelins =="
-print "''Orphelins : %d''" % len(orphan0)
-print "{{colonnes|taille=30|"
+print("== Orphelins ==")
+print("''Orphelins : %d''" % len(orphan0))
+print("{{colonnes|taille=30|")
 for p in orphan0:
-	print "* [[%s]]" % p
-print "}}"
-print "== 1 seul lien =="
-print "''1 seul lien : %d''" % len(orphan1)
-print "{{colonnes|taille=30|"
+	print("* [[%s]]" % p)
+print("}}")
+print("== 1 seul lien ==")
+print("''1 seul lien : %d''" % len(orphan1))
+print("{{colonnes|taille=30|")
 for p in orphan1:
-	print "* [[%s]]" % p
-print "}}"
-print "== 2 liens =="
-print "''2 liens : %d''" % len(orphan2)
-print "{{colonnes|taille=30|"
+	print("* [[%s]]" % p)
+print("}}")
+print("== 2 liens ==")
+print("''2 liens : %d''" % len(orphan2))
+print("{{colonnes|taille=30|")
 for p in orphan2:
-	print "* [[%s]]" % p
-print "}}"
-print "Non orphelins : %d" % (i - len(orphan0) - len(orphan1) - len(orphan2))
+	print("* [[%s]]" % p)
+print("}}")
+print("Non orphelins : %d" % (i - len(orphan0) - len(orphan1) - len(orphan2)))
 
 
 

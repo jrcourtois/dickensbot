@@ -3,7 +3,7 @@ from Site import site
 from ModelPage import EnglishModelPage
 from ModelPage import ModelPage
 import re
-from wikitools import Page
+from wikitools.page import Page
 
 def getPalette(f, templateName, county, state):
 

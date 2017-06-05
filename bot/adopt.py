@@ -1,5 +1,5 @@
 # -*- coding: utf8 -*-
-from wikitools import Page
+from wikitools.page import Page
 import Site
 import urllib.request, urllib.parse, urllib.error
 import re

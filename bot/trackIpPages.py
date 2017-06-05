@@ -1,10 +1,5 @@
 # -*- coding: utf8 -*-
-import re
-import pprint
-from wikitools import api
-from wikitools import pagelist
 from wikitools import Page
-from wikitools import Category
 from Site import site
 from Tools import printProgress
 from Tools import setOrphan
