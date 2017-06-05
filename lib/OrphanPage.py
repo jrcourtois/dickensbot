@@ -79,7 +79,7 @@ class OrphanPage(Page):
 		if not type(l) is str:
 			l = l.decode('utf8')
 		params = {'action':'query', 'bltitle' : l, 'list':'backlinks','blnamespace':ns, 'blfilterredir':'nonredirects'}
-		r = api.APIRequest(site,params)
+		r = api.APIRequest(site, params)
 		result = r.query(False)
 		return result['query']['backlinks']
 		
