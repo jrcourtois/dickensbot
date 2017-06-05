@@ -1,6 +1,6 @@
 # -*- coding: utf8 -*-
-from wikitools import Page
-from wikitools import NoPage
+from wikitools.page import Page
+from wikitools.exceptions import NoPage
 import Site
 from ModelPage import ItlPage
 from wikitools import api

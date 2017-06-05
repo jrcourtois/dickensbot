@@ -1,22 +1,22 @@
 # -*- coding: utf8 -*-
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import json
 
-server = u"http://petscan.wmflabs.org/?lang=fr&project=wikipedia&"
+server = "http://petscan.wmflabs.org/?lang=fr&project=wikipedia&"
 default_p = "&depth=12&max=30000&start=0&format=json&get_count=1&sparse=1&redirects=&callback="
 
 
 class QuickIntersection:
 	def __init__(self,cats):
 
-		self.url = server + "cats=" + urllib.quote(u"\n".join(cats).encode("utf8")) + default_p
+		self.url = server + "cats=" + urllib.parse.quote("\n".join(cats).encode("utf8")) + default_p
 		try:
-			self.json = urllib.urlopen(self.url).read()
+			self.json = urllib.request.urlopen(self.url).read()
 			res = json.loads(self.json)
 			self.count = res['pagecount']
 			self.pages = res['pages']
 		except:
-			print "Unable to load: " + self.url
+			print("Unable to load: " + self.url)
 			self.json = ""
 			self.count = 0
 			self.pages = []

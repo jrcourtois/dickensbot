@@ -29,9 +29,9 @@ class Report(object):
 
 	def printReport(self):
 
-		print str(self.withModel) + " page(s) with model"  
-		print str(len(self.models)) + " model(s)" 
-		print str(self.adopted_cnt) + " orphans adopted" 
+		print(str(self.withModel) + " page(s) with model")  
+		print(str(len(self.models)) + " model(s)") 
+		print(str(self.adopted_cnt) + " orphans adopted") 
 
 
 		self.models_f.write("{|class='wikitable sortable'\n")
@@ -39,7 +39,7 @@ class Report(object):
 		self.models_f.write("|-\n")
 		i = 0
 		for m in self.models:
-			print m.encode("utf8")
+			print(m.encode("utf8"))
 			if (len(self.models[m]) > 1): 
 				self.models_f.write("|[[:" + m.encode("utf8") + "]] ||" + str(len(self.models[m])) + "||")
 				for a in self.models[m]:

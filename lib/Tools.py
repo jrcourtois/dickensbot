@@ -1,5 +1,5 @@
 # -*- coding: utf8 -*-
-from wikitools import Page
+from wikitools.page import Page
 from wikitools import api
 import re
 import urllib.request, urllib.parse, urllib.error
@@ -77,7 +77,11 @@ def addPalette(page, title, adopt = False):
 def getFrenchPage(site, page):
 	params = {'action':'query', 'prop':'langlinks', 'titles':page}
 	request = api.APIRequest(site, params)
-	result = request.query(False)
+	try:
+		result = request.query(False)
+	except urllib.error.HTTPError:
+		print("Unable to handle request %s" % params)
+		return None
 	for p in result['query']['pages']:
 		links = []
 		if 'langlinks' in result['query']['pages'][p]:

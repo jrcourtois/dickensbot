@@ -3,8 +3,7 @@ import Site
 import Tools
 import re
 from wikitools import api
-from wikitools import Page
-from pprint import pprint
+from wikitools.page import Page
 
 class ItlPage(Page):
 
@@ -60,8 +59,7 @@ class ItlPage(Page):
 		try:
 			ret = " | groupe" + cnt + " = " + self.getLink(grp["title"],tab)  + "\n" 
 		except:
-			print("gLT:problem with : " )
-			pprint(grp)
+			print("gLT:problem with : %s" % grp )
 			ret = " | groupe" + cnt + " = " + self.getLink("list",tab)  + "\n" 
 		if grp["sub"]:
 			ret += " | liste" + cnt + " = {{Méta palette de navigation sous-groupe\n"
@@ -126,9 +124,7 @@ class EnglishModelPage(ItlPage):
 		try:
 			text = self.getWikiText().decode("utf8")
 		except:
-			text = self.getWikiText()
-			print("Got an exception on decoding utf8")
-			pprint(text)
+			print("Got an exception on decoding utf8" % self.getWikiText())
 		for link in re.findall(r"\[\[.*?\]\]", text):
 			m = re.match(r"\[\[(.*)\|(.*)\]\]",link)
 			if (m):
@@ -201,9 +197,7 @@ class DeutschModelPage(ItlPage):
 		try:
 			text = self.getWikiText().decode("utf8")
 		except:
-			text = self.getWikiText()
-			print("Got an exception on decoding utf8")
-			pprint(text)
+			print("Got an exception on decoding utf8 %s" % self.getWikiText())
 		text = re.sub(r"\[(.*?)\|.*?\]", r"[\1]",text)
 		for a in self.translatedLinks:
 			text = text.replace(a, self.translatedLinks[a])

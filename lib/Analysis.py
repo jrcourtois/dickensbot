@@ -1,11 +1,7 @@
 # -*- coding: utf8 -*-
-from wikitools import Category
-import time
 import re
-import pprint
-from wikitools import Page
+from wikitools.page import Page
 from wikitools import api
-import argparse
 import urllib.request, urllib.parse, urllib.error
 
 class Analysis:
