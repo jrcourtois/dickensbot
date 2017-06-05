@@ -42,7 +42,7 @@ def parseArticle(p,output):
 		if l in o.pages:
 			for p in o.pages[l]:
 				i+=1
-				output.write("[["+p.title.encode("utf8")+"|"+str(i)+"]], ")
+				output.write("[[%s|%d]], " % (p.title, i))
 	# models
 	output.write("||")
 	if o.getNbModels() > 0:
