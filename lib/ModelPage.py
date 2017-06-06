@@ -122,7 +122,7 @@ class EnglishModelPage(ItlPage):
 
 	def oldTranslatedTemplate(self):
 		try:
-			text = self.getWikiText().decode("utf8")
+			text = self.getWikiText()
 		except:
 			print("Got an exception on decoding utf8" % self.getWikiText())
 		for link in re.findall(r"\[\[.*?\]\]", text):
@@ -150,7 +150,7 @@ class EnglishModelPage(ItlPage):
 		return text
 	def getJson(self):
 		json = {}
-		text = self.getWikiText().decode("utf8")
+		text = self.getWikiText()
 		text = re.sub(r"\n+", " ___L___",text)
 		try: 
 			json["title"] = re.findall(r"title\s*\=\s*(.*?)\|", text)[0]
@@ -195,7 +195,7 @@ class DeutschModelPage(ItlPage):
 		ItlPage.__init__(self, "de", title)
 	def getTranslatedTemplate(self):
 		try:
-			text = self.getWikiText().decode("utf8")
+			text = self.getWikiText()
 		except:
 			print("Got an exception on decoding utf8 %s" % self.getWikiText())
 		text = re.sub(r"\[(.*?)\|.*?\]", r"[\1]",text)

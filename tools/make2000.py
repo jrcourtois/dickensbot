@@ -17,9 +17,9 @@ parser.add_argument("month")
 parser.add_argument("year")
 args = parser.parse_args()
 
-d = args.day.decode("utf8")
-m = args.month.decode("utf8")
-year = args.year.decode("utf8")
+d = args.day
+m = args.month
+year = args.year
 
 date="%s %s %s" % (d,m,year)
 

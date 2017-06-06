@@ -12,7 +12,7 @@ try:
 	models = urllib.request.urlopen(SITE_JR + "models.wiki")
 	modelPage = Page(site,"Utilisateur:DickensBot/Modeles")
 except urllib.error.HTTPError as e:
-	print "models.wiki was missing"
+	print ("models.wiki was missing")
 
 
 modelPage.edit(text = models.read().decode("utf8"), summary = "Mise à jour", bot=True)

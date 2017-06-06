@@ -44,8 +44,7 @@ class Analysis:
 			lines =  p.getWikiText().splitlines()
 			b_print = True
 			ret = ""
-			for l in lines:
-				line = l.decode("utf8")
+			for line in lines:
 				m = re.search(self.MODEL_TOP, line)
 				if m:
 					m = re.search(self.MODEL_TOP+"\|nb=(\d+)", line)

@@ -21,7 +21,7 @@ rePar = re.compile(r"==.*==")
 reTitle= re.compile(r"\{\{(.*)\|1=(.*?)\}\}")
 reDate = re.compile(r"(\d+\s.*?\s201.).*\d+\:\d\d\s\(CES?T\)$")
 for line in liste.splitlines():
-	l = line.decode("utf8")
+	l = line
 	if rePar.match(l):
 		indice += 1
 		page.insert(indice, l + "\n") 
@@ -40,7 +40,7 @@ for line in liste.splitlines():
 			page[indice] = ""
 			title = ""
 
-props = prop.getWikiText().decode("utf8")
+props = prop.getWikiText()
 for l in articles:
 	props +="\n#{{/prop|%s|%s}}" % (l, articles[l])
 
@@ -57,7 +57,7 @@ for line in lines:
 	if m:
 		p = Page(site, "Discussion:" + m.group(1) + "/Suppression")
 		try:
-			txt  = p.getWikiText().decode("utf8")
+			txt  = p.getWikiText()
 			if (txt.find("{{Article supp")>-1):
 				appSupp += "\n#{{/supp|" + m.group(1) + "|" + m.group(2) + "|" + time.strftime("%d/%m/%Y") + "}}"
 			elif (txt.find("{{Article cons")>-1):

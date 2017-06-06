@@ -13,7 +13,7 @@ for l in adopte:
 	if m:
 		title = m.group(1).decode("utf8")
 		adopted = Page(Site.site, title)
-		oldTxt = adopted.getWikiText().decode("utf8")
+		oldTxt = adopted.getWikiText()
 		txt = re.sub(r"\{\{[O|o]rph.*?\}\}\n?", "", oldTxt)
 		if txt == oldTxt:
 			print ("Bandeau absent")

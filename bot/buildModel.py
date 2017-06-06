@@ -20,7 +20,7 @@ page = EnglishModelPage(t,m)
 
 if m != "":
 	p = Page(site, "Modèle:Palette "+ m)
-	template = page.getTranslatedTemplate().decode("utf8")
+	template = page.getTranslatedTemplate()
 	template = template.replace("–", "-")
 	if args.noPrint == False:
 		print((page.oldTranslatedTemplate()))

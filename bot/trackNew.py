@@ -3,6 +3,7 @@ from Site import site
 from wikitools import api
 from OrphanPage import OrphanPage
 import Tools
+import urllib.error
 
 COUNT = 400
 
@@ -41,7 +42,7 @@ for p in result['query']['recentchanges']:
 			nbLinkAdded += Tools.setOrphanIfNeeded(page)
 		except:
 			print(("Exception occurs: %s" % p['title'] ))
-			nbError += 1z
+			nbError += 1
 
 print("==== %d orphelins, %d links added, %d adoptés (%d erreurs)" % (nbOrphan, nbLinkAdded, nbAdopted, nbError))
 

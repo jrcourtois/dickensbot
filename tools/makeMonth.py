@@ -11,8 +11,8 @@ parser.add_argument("month")
 parser.add_argument("year")
 args = parser.parse_args()
 
-m = args.month.decode("utf8")
-year = args.year.decode("utf8")
+m = args.month
+year = args.year
 
 month = AlmanachMonth(m, year)
 monthArray = []

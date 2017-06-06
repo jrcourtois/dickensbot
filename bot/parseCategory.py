@@ -9,7 +9,7 @@ import Tools
 parser = argparse.ArgumentParser("To parse a category")
 parser.add_argument("catName")
 args = parser.parse_args()
-catName = args.catName.decode("utf8")
+catName = args.catName
 
 cat = Category(Site.site,catName) 
 

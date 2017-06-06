@@ -38,7 +38,7 @@ class OrphanPage(Page):
 			if self.getNbLinks() > 2:
 				return True
 			if self.isHomo():
-				print((self.title.decode("utf8") + " is an homonyme page"))
+				print((self.title + " is an homonyme page"))
 				return True
 		except NoPage as e:
 			print("No page found")

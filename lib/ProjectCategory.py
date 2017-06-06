@@ -178,7 +178,7 @@ class ProjectCategory:
 	def getOldPage(self):
 		self.projectPage = Page(Site.site, "Projet:" + self.catName + "/Articles orphelins")
 		if self.projectPage.exists:
-			self.oldText = self.projectPage.getWikiText().decode("utf8")
+			self.oldText = self.projectPage.getWikiText()
 			try:
 				self.startCount = int(reStart.search(self.oldText).group(1))
 			except:

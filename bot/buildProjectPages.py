@@ -19,7 +19,7 @@ def addMessage(pc,title):
 		if not discProjet.exists:
 			print(title  + "No discussion page")
 			return
-	oldText = discProjet.getWikiText().decode("utf8")
+	oldText = discProjet.getWikiText()
 	try:
 		date = reDate.search(oldText).group(1)
 	except:

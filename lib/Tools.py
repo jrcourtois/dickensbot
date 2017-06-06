@@ -54,7 +54,7 @@ def printProgress(indice, top):
 	sys.stdout.flush()
 
 def addPalette(page, title, adopt = False):
-	txt = page.getWikiText().decode("utf8")
+	txt = page.getWikiText()
 	match = re.search(r"\{\{[P|p]alette.(.+?)\}\}", txt) 
 	if match:
 		for elem in match.group(1).split("|"):
@@ -97,7 +97,7 @@ def getFrenchPage(site, page):
 	return None
 def setOrphan(p):
 	ret = ""
-	new = p.getWikiText().decode("utf8")
+	new = p.getWikiText()
 	if len(new) == 0:
 		return "empty"
 	if new.find("{{en cours}}") > -1:
