@@ -15,7 +15,7 @@ class Report(object):
 		page = OrphanPage(p)
 		if page.toAdopt():
 			self.adopted_cnt += 1
-			self.desorphan_f.write("# [[" + p.encode("utf-8") + "]]\n") 
+			self.desorphan_f.write("# [[" + p + "]]\n") 
 			return
 		if page.getNbItlModels()>0:
 			self.withModel += 1
