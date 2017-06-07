@@ -3,6 +3,7 @@ import re
 from wikitools.page import Page
 from wikitools import api
 import urllib.request, urllib.parse, urllib.error
+import time
 
 class Analysis:
 
