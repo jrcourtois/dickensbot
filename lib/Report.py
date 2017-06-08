@@ -41,9 +41,9 @@ class Report(object):
 		for m in self.models:
 			print(m.encode("utf8"))
 			if (len(self.models[m]) > 1): 
-				self.models_f.write("|[[:" + m.encode("utf8") + "]] ||" + str(len(self.models[m])) + "||")
+				self.models_f.write("|[[:" + m.decode("utf8") + "]] ||" + str(len(self.models[m])) + "||")
 				for a in self.models[m]:
-					self.models_f.write("[[" + a.encode("utf8") + "]], ")
+					self.models_f.write("[[" + a.decode("utf8") + "]], ")
 				self.models_f.write("\n|-\n")
 		self.models_f.write("|}")
 		self.models_f.close()
