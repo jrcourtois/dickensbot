@@ -2,6 +2,7 @@
 import re
 from wikitools import api
 from wikitools import pagelist
+import wikitools
 import Site
 import Tools
 from OrphanPage import OrphanPage
@@ -29,8 +30,12 @@ for p in pages:
 	if p.namespace > 0:
 		print(("%s : not an article" % p.title))
 		continue
-	if p.isRedir():
-		print(("%s : redirect" % p.title))
+	try:
+		if p.isRedir():
+			print(("%s : redirect" % p.title))
+			continue
+	except wikitools.exceptions.NoPage:
+		print ("%s: not found" % p.title)
 		continue
 	p.setPageInfo()
 	if int(p.pageid) < 1:

@@ -3,6 +3,7 @@ from wikitools.page import Page
 import Site
 import urllib.request, urllib.parse, urllib.error
 import re
+from wikitools.exceptions import APIQueryError
 
 print("Adoption")
 adopte = urllib.request.urlopen("http://www.jrcourtois.net/wiki/adopte.wiki")
@@ -18,6 +19,10 @@ for l in adopte:
 		if txt == oldTxt:
 			print ("Bandeau absent")
 		else:
-			print (adopted.edit(txt, summary = "Article adopte !",bot=True))
+			try:
+				print (adopted.edit(txt, summary = "Article adopte !",bot=True))
+			except APIQueryError:
+				print("%s has not been adopted" % title)
+
 
 

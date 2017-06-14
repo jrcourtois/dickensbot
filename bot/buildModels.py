@@ -69,6 +69,7 @@ def buildPalette(englishTemplate, county, state):
 
 templates = open("templates.txt").readlines()
 counties = open("counties.txt").readlines()
+STATE = "New York"
 
 i=0
 res = []
@@ -76,8 +77,8 @@ cError = 0
 for t in templates:
 	print((t.strip()))
 	try:
-		#frenchPalette = buildPalette(t.strip().decode("utf8"), counties[i].strip().decode("utf8"), "Iowa")
-		frenchPalette = "Modèle:Palette %s (%s)" % (counties[i].strip().decode("utf8"),"Iowa")
+		frenchPalette = buildPalette(t.strip(), counties[i].strip(), STATE)
+		frenchPalette = "Modèle:Palette %s (%s)" % (counties[i].strip(), STATE)
 
 		p = ModelPage(frenchPalette)
 		p.parseLinks()

@@ -49,6 +49,7 @@ for y in YEAR:
 	for mon in MONTH:
 		catName = "Catégorie:Article orphelin depuis %s %d" %(mon, y)
 		fileName= "orph_%d-%02d.arch" % (y, m)
+		printPageFromFile(catName, fileName)
 		catName = "Catégorie:Wikipédia:Tentative d'adoption en %s %d" %(mon, y)
 		fileName= "tent_%d-%02d.arch" % (y, m)
 		printPageFromFile(catName, fileName)

@@ -56,28 +56,28 @@ for line in lines:
 	m = re.match(r"#.*\{\{\/prop\|(.*?)\|(.*)\}\}", line)
 	if m:
 		p = Page(site, "Discussion:" + m.group(1) + "/Suppression")
-		try:
-			txt  = p.getWikiText()
-			if (txt.find("{{Article supp")>-1):
-				appSupp += "\n#{{/supp|" + m.group(1) + "|" + m.group(2) + "|" + time.strftime("%d/%m/%Y") + "}}"
-			elif (txt.find("{{Article cons")>-1):
+		txt  = p.getWikiText()
+		suppMatch = re.match(r".*(A|a)rticle supprimé", txt, re.S)
+		if suppMatch:
+			appSupp += "\n#{{/supp|" + m.group(1) + "|" + m.group(2) + "|" + time.strftime("%d/%m/%Y") + "}}"
+		else:
+			consMatch = re.match(r".*(a|A)rticle cons", txt, re.S)
+			if consMatch:
 				appCons += "\n#{{/cons|" + m.group(1) + "|" + m.group(2) + "|" + time.strftime("%d/%m/%Y") + "}}"
 			else:
 				newProps += "\n" + line
-		except:
-			print("**********************************page not exists")
 
 print("***********************************")
 print("Supp")
-supp.edit(appendtext=appSupp,bot=True)
 print(appSupp)
+supp.edit(appendtext=appSupp,bot=True)
 print("***********************************")
 print("Cons")
-cons.edit(appendtext=appCons,bot=True)
 print(appCons)
+cons.edit(appendtext=appCons,bot=True)
 print("***********************************")
-prop.edit(text=newProps, summary="added last propositions",bot=True)
 print(newProps)
+prop.edit(text=newProps, summary="added last propositions",bot=True)
 t = ""
 for a in page:
 	t += a + "\n"
