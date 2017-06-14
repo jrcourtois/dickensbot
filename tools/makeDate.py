@@ -3,7 +3,7 @@
 import argparse
 
 from WikiDate import WikiDate
-from wikitools import Page
+from wikitools.page import Page
 from Site import site
 
 

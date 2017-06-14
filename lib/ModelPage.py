@@ -12,6 +12,7 @@ class ItlPage(Page):
 		self.site = Site.getKnownSite(l)
 		self.modele = translation
 		self.translatedLinks = {}
+		self.englishTitle = title
 		if self.site:
 			Page.__init__(self, self.site, title)
 			self.translatedLinks = self.__getTranslatedLinks()
@@ -51,7 +52,9 @@ class ItlPage(Page):
 		for t in sorted(json["groups"]):
 			g = json["groups"][t]
 			ret += self.getLinksTranslated(t,g,json["links"])
-		ret += "}}\n<noinclude>{{Documentation palette}}\n[[Catégorie:Palette de navigation]]</noinclude>\n"
+		ret += "}}\n<noinclude>{{Documentation palette}}\n[[Catégorie:Palette de navigation]]\n"
+
+		ret+= ("[[en:%s]]</noinclude>\n" % self.englishTitle)
 
 		return ret.encode("utf8")
 

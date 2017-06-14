@@ -106,6 +106,7 @@ def setOrphan(p):
 		return "nobots"
 	if new.lower().find("{{portail") == -1:
 		 ret = "------ NO PORTAIL ----------"
+
 	new = addModele(new, "{{orphelin|date="+getFrenchDate()+"}}")
 	p.edit(new, nocreate="True", summary="article orphelin", bot=True)
 	return ret
@@ -127,6 +128,8 @@ def appendCat(page, cat, key):
 
 def setOrphanIfNeeded(p):
 	cat = p.getCategories()
+	if p.isHomo():
+		return 0
 	if ( not isOrphanCat(cat)):
 		setOrphan(p)
 		return 1
