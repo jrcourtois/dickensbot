@@ -2,6 +2,7 @@
 import re
 import requests
 import datetime 
+import urllib
 
 from wikitools import api
 from wikitools import category
@@ -90,7 +91,7 @@ class WikiDate :
 		return (keys, born)
 
 	def getName(self, url):
-		return url.split("/")[-1].replace("%20", " ").replace("%28", "(").replace("%29", ")")
+		return urllib.parse.unquote(url.split("/")[-1])
 
 	def _getSex(self, sex, switch):
 		if "Q6581097" in sex:
