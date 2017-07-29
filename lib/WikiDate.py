@@ -7,6 +7,7 @@ import urllib
 from wikitools import api
 from wikitools import category
 from Site import site
+import Tools
 
 
 MONTH = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"]
@@ -52,15 +53,20 @@ class WikiDate :
 		day = datetime.date(y, m, d)
 		self.dow = WEEK[day.timetuple().tm_wday]
 		self.doy = day.timetuple().tm_yday
+		self.dayMonth =self. _getStringMonth(d,m)
 
 		(self.allKeys, self.allDatas) = self._getArray(QUERY_GAL % (y, m, d))
 
 	def _getStringDate(self, d,m,y):
 		return "%s %s %s" % (str(d), MONTH[m-1], str(y))
 
+	def _getStringMonth(self, d, m):
+		if d == 1:
+			return "1er %s" % ( MONTH[m-1])
+		return "%s %s" % (str(d), MONTH[m-1])
 
 	def _getArray(self, query):
-		print(query)
+		#print(query)
 		data = requests.get(URL, params={'query': query, 'format': 'json'}).json()
 		born = {}
 		keys = []
@@ -100,8 +106,13 @@ class WikiDate :
 			return switch[1]
 
 	def _getDate(self, date):
-		(y,m,d) = date.split("T")[0].split("-")
+		try:
+			(y,m,d) = date.split("T")[0].split("-")
+		except ValueError:	
+			print (date)
+			return 'date inconnue'
 		if (d == 'XX') : 
+			print (date)
 			return 'date inconnue'
 		return "le " + self._getStringDate(int(d), int(m), int(y))
 
@@ -112,13 +123,13 @@ class WikiDate :
 
 		link = self._getLink(elem)
 		if 'link' != "":
-				return "* '''%s'''%s, %s\n" % (link, sdate, elem['desc'])
+				return "'''%s'''%s, %s" % (link, sdate, elem['desc'])
 		return ""
 
 	def _getLink(sefl, elem):
 		if 'site' in elem:
-			if elem['site'] == elem['sLabel']:
-				return "[[%s]]" % (elem['site'])
+			if elem['site'].replace("_", " ") == elem['sLabel']:
+				return "[[%s]]" % (elem['sLabel'])
 			else:
 				return "[[%s|%s]]" % (elem['site'], elem['sLabel'])
 		else:
@@ -130,6 +141,7 @@ class WikiDate :
 
 	def getDeathLine(self, elem):
 		return self._getSiteLine(elem, self._getDate(elem['birth']), BORN_SWITCH)
+
 	def getBirthLine(self, elem):
 		if ('death' in elem):
 			return self._getSiteLine(elem, self._getDate(elem['death']), DEAD_SWITCH)
@@ -138,39 +150,63 @@ class WikiDate :
 
 
 	def getAllDeath(self):
+		events = self.getDeath()
 		ret = ""
+		if len(events) > 0:
+			ret = "\n== Décès ==\n"
+			for l in events:
+				ret += "* %s\n" % l
+		return ret
+
+	def getDeath(self):
+		ret = []
 		for t in self.allKeys:
 			if (self.allDatas[t]['code'] == 'P570'):
-				ret += self.getDeathLine(self.allDatas[t])
-		if ret != "":
-			return 	"\n== Décès ==\n" + ret
+				ret.append(self.getDeathLine(self.allDatas[t]))
 		return ret
 
 	def getAllBirth(self):
+		events = self.getBirth()
 		ret = ""
-		for t in self.allKeys:
-			if (self.allDatas[t]['code'] == 'P569'):
-				ret += self.getBirthLine(self.allDatas[t])
-		if ret != "":
-			return 	"\n== Naissances ==\n" + ret
+		if len(events) > 0:
+			ret = "\n== Naissances ==\n"
+			for l in events:
+				ret += "* %s\n" % l
 		return ret
 
+	def getBirth(self):
+		ret = []
+		for t in self.allKeys:
+			if (self.allDatas[t]['code'] == 'P569'):
+				ret.append(self.getBirthLine(self.allDatas[t]))
+		return ret
+		
+
 	def getOtherEvents(self):
-		self.unknown = []
+		events = self.getEvents()
 		ret = ""
+		if len(events) > 0:
+			ret = "\n== Événements ==\n"
+			for l in events:
+				ret += "* %s\n" % l
+		return ret
+
+	def getEvents(self):
+		self.unknown = []
+		ret = []
 		for t in self.allKeys:
 			code = self.allDatas[t]['code']
 			if code in DICTIONNARY:
-				ret += "* " + DICTIONNARY[code] % (self._getLink(self.allDatas[t])) + "\n"
+				ret.append(DICTIONNARY[code] % (self._getLink(self.allDatas[t])))
 			else:
 				if code not in self.unknown:
 					self.unknown.append(code)
-		if ret != "":
-			return 	"\n== Événements ==\n" + ret
 		return ret
 
+
 	def getWikiPage(self):
-		ret = "{{Création automatique|DickensBot}}\n"
+		ret = "{{ébauche|chronologie}}"
+		ret+= "{{Création automatique|DickensBot|date=%s}}\n" % (Tools.getFrenchDate())
 		ret+= "{{Infobox Jour|%s|%s|%s}}\n" % (self.d, self.m, self.y)
 		ret+= "\n"
 		ret+= "Le %s '''%s''' est le %d{{e}} jour de l'année [[%s]]." % (self.dow, self.date, self.doy, self.y)

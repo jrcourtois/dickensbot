@@ -24,17 +24,20 @@ def printPageFromFile(page, fileName):
 		print("File not found: %s" % fileName)
 		return
 	if s.getcode() != 200:
+		print("File not found: %s" % fileName)
 		return
-	lines = s.readlines()
 	print(("%s => %s" % (fileName,catName)))
-	ret = "{|class='wikitable sortable'\n"
+	lines = s.readlines()
+	ret = "[[:Catégorie:%s]]\n" % page
+	ret+= "{|class='wikitable sortable'\n"
 	ret += "!Titre!!Nb links!!Nb pages traduites!!tpl !! en page !! de page !! es page !! models !! admisssible \n"
 	for l in lines:
 		ret += "|-\n"
 		ret += l.decode("utf8")
 	ret +="|-\n"
-	ret+= "|}"
-	p = Page(site, page + "/analysis")
+	ret+= "|}\n"
+	ret+= "{{Palette Articles orphelins}}"
+	p = Page(site, "Utilisateur:DickensBot/analysis/" + page )
 	p.edit(text = ret, summary=str(len(lines)) + " articles à adopter", bot=True)
 
 a = Analysis(site)
@@ -45,12 +48,12 @@ YEAR = [2014, 2015, 2016, 2017]
 MONTH = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"]
 # orphelins 
 for y in YEAR:
-	m =1
+	m = 1
 	for mon in MONTH:
-		catName = "Catégorie:Article orphelin depuis %s %d" %(mon, y)
+		catName = "Article orphelin depuis %s %d" %(mon, y)
 		fileName= "orph_%d-%02d.arch" % (y, m)
 		printPageFromFile(catName, fileName)
-		catName = "Catégorie:Wikipédia:Tentative d'adoption en %s %d" %(mon, y)
+		catName = "Wikipédia:Tentative d'adoption en %s %d" %(mon, y)
 		fileName= "tent_%d-%02d.arch" % (y, m)
 		printPageFromFile(catName, fileName)
 		m += 1

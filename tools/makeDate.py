@@ -23,4 +23,5 @@ print(almDay.getWikiPage())
 
 p = Page(site, almDay.date)
 
+
 p.edit(text = almDay.getWikiPage(), summary="Créé par un bot, merci de le corriger",bot=True)

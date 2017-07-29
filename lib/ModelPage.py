@@ -214,14 +214,13 @@ class DeutschModelPage(ItlPage):
 #		text = re.sub(r"^\s*|\s*$", "", text,flags=re.MULTILINE)
 		return text
 
-DONTLINK = ["Siège du comté", "Iowa"]
 
 class ModelPage(Page):
 	def __init__(self, title):
 		Page.__init__(self, Site.site, title)
 		self.name = re.sub(".*Palette ", "", self.title)
 
-	def parseLinks(self):
+	def parseLinks(self, DONTLINK = []):
 		print((self.name))
 		adopt = len(self.getLinks()) > 3
 		for p in self.getLinks():

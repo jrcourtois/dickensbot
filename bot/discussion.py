@@ -1,4 +1,4 @@
-# -*- coding: utf8 -*-
+	# -*- coding: utf8 -*-
 from wikitools.page import Page
 from Site import site
 import Tools
@@ -59,13 +59,17 @@ for line in lines:
 		txt  = p.getWikiText()
 		suppMatch = re.match(r".*(A|a)rticle supprimé", txt, re.S)
 		if suppMatch:
-			appSupp += "\n#{{/supp|" + m.group(1) + "|" + m.group(2) + "|" + time.strftime("%d/%m/%Y") + "}}"
+			appSupp += "\n#{{/supp|%s|%s|%s}}" % (m.group(1), m.group(2), time.strftime("%d/%m/%Y"))
 		else:
 			consMatch = re.match(r".*(a|A)rticle cons", txt, re.S)
 			if consMatch:
-				appCons += "\n#{{/cons|" + m.group(1) + "|" + m.group(2) + "|" + time.strftime("%d/%m/%Y") + "}}"
+				appCons += "\n#{{/cons|%s|%s|%s}}" % (m.group(1), m.group(2), time.strftime("%d/%m/%Y"))
 			else:
-				newProps += "\n" + line
+				fusMatch = re.match(r".*(a|A)rticle fusionn", txt, re.S)
+				if fusMatch:
+					appCons += "\n#{{/cons|%s|%s|%s}} (FUSION)" % (m.group(1), m.group(2), time.strftime("%d/%m/%Y"))
+				else:
+					newProps += "\n" + line
 
 print("***********************************")
 print("Supp")
