@@ -28,7 +28,10 @@ def printPageFromFile(page, fileName):
 		return
 	print(("%s => %s" % (fileName,catName)))
 	lines = s.readlines()
-	ret = "[[:Catégorie:%s]]\n" % page
+	if len(lines) == 0:
+		print ("Empty file")
+		return
+	ret = "Il y a %d articles sur cette page et {{PAGESINCATEGORY:%s}} dans [[:Catégorie:%s]]\n" % (len(lines), page, page)
 	ret+= "{|class='wikitable sortable'\n"
 	ret += "!Titre!!Nb links!!Nb pages traduites!!tpl !! en page !! de page !! es page !! models !! admisssible \n"
 	for l in lines:
