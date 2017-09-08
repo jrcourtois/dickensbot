@@ -20,7 +20,7 @@ for l in adopte:
 			print ("Bandeau absent")
 		else:
 			try:
-				print (adopted.edit(txt, summary = "Article adopte !",bot=True))
+				print (adopted.edit(txt, summary = "Article adopté !",bot=True))
 			except APIQueryError:
 				print("%s has not been adopted" % title)
 
