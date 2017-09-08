@@ -4,6 +4,7 @@ import re
 from ModelPage import EnglishModelPage
 from ModelPage import ModelPage
 from wikitools.page import Page
+from wikitools.exceptions import NoPage
 
 
 class USCounty:
@@ -18,6 +19,8 @@ class USCounty:
 
 
 	def getPalette(self, f):
+		map = False
+		seat = False
 
 
 		m = re.findall(r".*seat\s*=\s*(.*)\s", f)
@@ -36,7 +39,8 @@ class USCounty:
 
 		t = re.sub(r"groupe(\d+)\s=.*City.*", r"titre\1 = Villes", t)
 		t = re.sub(r"groupe(\d+)\s=.*Township.*", r"titre\1 = Townships", t)
-		t = re.sub(r"groupe(\d+)\s=.*Town.*", r"titre\1 = Villages", t)
+		t = re.sub(r"groupe(\d+)\s=.*Town.*", r"titre\1 = Towns", t)
+		t = re.sub(r"groupe(\d+)\s=.*Village.*", r"titre\1 = Villages", t)
 		t = re.sub(r"groupe(\d+)\s=.*CDP.*", r"titre\1 = CDPs", t)
 		t = re.sub(r"groupe(\d+)\s=.*communit.*", r"titre\1 = Secteurs non constitués en municipalité", t)
 		t = re.sub(r"groupe(\d+)\s=.*territory.*", r"titre\1 = Territoires", t)
@@ -78,5 +82,9 @@ class USCounty:
 
 	def includePalette(self):
 		frenchPalette = "Modèle:Palette %s (%s)" % (self._c, self._s)
-		p = ModelPage(frenchPalette)
-		p.parseLinks(["Siège de comté", self._s])
+		try:
+			p = ModelPage(frenchPalette)
+			p.parseLinks(["Siège de comté", self._s])
+		except NoPage:
+			print ("Page %s does not exist" % (frenchPalette))
+
