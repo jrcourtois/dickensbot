@@ -11,6 +11,8 @@ def addModele(txt, modele):
 	tab = txt.split("\n")
 	newTxt = ""
 	l = 0
+	if "Taxobox" in txt:
+		return modele + "\n" + txt
 	for line in tab:
 		if line.startswith("{") and line.endswith("}"):
 			newTxt += line + "\n"
