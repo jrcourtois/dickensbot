@@ -148,10 +148,11 @@ class ProjectCategory:
 	def getPageArray(self, pages):
 		s = ""
 		for l in pages:
+			title = l['page_title'].replace("_", " ")
 			if l in self.admissibles:
-				s+="# ''[[" + l.replace("_", " ") + "]]''\n"
+				s+="# ''[[" + title + "]]''\n"
 			else:
-				s+="# [[" + l.replace("_", " ") + "]]\n"
+				s+="# [[" + title + "]]\n"
 		if (len(pages) > 4):
 			return "{{Colonnes|taille=30|\n" + s + "}}\n"
 		else:
@@ -199,7 +200,7 @@ class ProjectCategory:
 		summary = "MAJ: " + str(self.getCount())
 		to = self.getHeader() + self.getPageText()
 		print(summary + " - " + self.catName)
-		t = ProjectCategory.getBotTxt(self.oldText, to).encode("utf8")
+		t = ProjectCategory.getBotTxt(self.oldText, to)
 		print(self.projectPage.title)
 		self.projectPage.edit(text=t,summary = summary,bot=True)
 
