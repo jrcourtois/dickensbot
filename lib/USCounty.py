@@ -42,6 +42,7 @@ class USCounty:
 		t = re.sub(r"groupe(\d+)\s=.*Town.*", r"titre\1 = Towns", t)
 		t = re.sub(r"groupe(\d+)\s=.*Village.*", r"titre\1 = Villages", t)
 		t = re.sub(r"groupe(\d+)\s=.*CDP.*", r"titre\1 = CDPs", t)
+		t = re.sub(r"groupe(\d+)\s=.*Precin.*", r"titre\1 = Precincts", t)
 		t = re.sub(r"groupe(\d+)\s=.*communit.*", r"titre\1 = Secteurs non constitués en municipalité", t)
 		t = re.sub(r"groupe(\d+)\s=.*territory.*", r"titre\1 = Territoires", t)
 		t = re.sub(r"groupe(\d+)\s=.*indian.*", r"titre\1 = Réserves indiennes", t)
