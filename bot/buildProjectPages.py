@@ -49,12 +49,13 @@ lines = projets.getLinks()
 allCats = {}
 
 nbError = 0
+
 for p in lines:
 	m = re.match(r'Projet:(.*)\/Articles orphelins', p)
 	if m:
 		last = m.group(1)
-		
 		print(last)
+
 		try:
 			pc = ProjectCategory(last,date)
 			allCats[pc] = pc.getCount()
@@ -85,4 +86,4 @@ for w in sorted(allCats, key=allCats.get, reverse=True):
 report+= "|}"
 
 page = Page(site, "Utilisateur:DickensBot/Concours")
-page.edit(text=report.encode("utf8"), summary = "MAJ", bot=True)
+page.edit(text=report, summary = "MAJ", bot=True)
