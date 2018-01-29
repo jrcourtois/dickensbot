@@ -42,7 +42,7 @@ for p in pages:
 		print(("%s : del" % p.title))
 		continue
 	orphan = OrphanPage(p.title)
-	if orphan.toAdopt():
+	if orphan.toAdopt(0):
 		print(("%s : already adopted" % p.title))
 		continue
 	cat = p.getCategories()

@@ -4,8 +4,13 @@ from wikitools import api
 from OrphanPage import OrphanPage
 import Tools
 import urllib.error
+import datetime
 
 COUNT = 400
+
+startDay = datetime.date.today() - datetime.timedelta(days=2)
+
+startStamp =  '%sT00:00:00.000Z' % (startDay.isoformat())	
 
 params = {
 	'action':'query', 
@@ -13,7 +18,8 @@ params = {
 	'rctype' : 'new',
 	'rcnamespace' : '0', 
 	'rcshow' : '!redirect',
-	'rclimit': COUNT}
+	'rclimit': COUNT,
+	'rcstart': startStamp}
 
 r = api.APIRequest(site, params)
 result = r.query(False)
