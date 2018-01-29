@@ -32,10 +32,10 @@ class OrphanPage(Page):
 				self.itlLinks[l['lang']] = self.__getLinks(s, l['*'], '0')
 				self.itlModels[l['lang']] = self.__getLinks(s, l['*'], '10')
 
-	def toAdopt(self):
+	def toAdopt(self, nbPage = 2):
 		print (("%s has %d links" % (self.title, self.getNbLinks())))
 		try:
-			if self.getNbLinks() > 2:
+			if self.getNbLinks() > nbPage:
 				return True
 			if self.isHomo():
 				print((self.title + " is an homonyme page"))

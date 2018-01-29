@@ -85,6 +85,8 @@ class WikiDate :
 					born[key]['desc'] = item['sDescription']['value']
 				if 'sex' in item:
 					born[key]['sex'] = item['sex']['value']
+				else:
+					born[key]['sex'] = ["Q6581097"]
 				if 'sLabel' in item:
 					born[key]['sLabel'] = item['sLabel']['value']
 				if 'code' in item:
