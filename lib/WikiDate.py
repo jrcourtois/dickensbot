@@ -54,8 +54,12 @@ class WikiDate :
 		self.dow = WEEK[day.timetuple().tm_wday]
 		self.doy = day.timetuple().tm_yday
 		self.dayMonth =self. _getStringMonth(d,m)
+		self.allKeys = False
+		self.allDatas  = False
 
-		(self.allKeys, self.allDatas) = self._getArray(QUERY_GAL % (y, m, d))
+	def buildPage(self):
+		(self.allKeys, self.allDatas) = self._getArray(QUERY_GAL % (self.y, self.m, self.d))
+
 
 	def _getStringDate(self, d,m,y):
 		return "%s %s %s" % (str(d), MONTH[m-1], str(y))
@@ -162,9 +166,10 @@ class WikiDate :
 
 	def getDeath(self):
 		ret = []
-		for t in self.allKeys:
-			if (self.allDatas[t]['code'] == 'P570'):
-				ret.append(self.getDeathLine(self.allDatas[t]))
+		if (self.allKeys):
+			for t in self.allKeys:
+				if (self.allDatas[t]['code'] == 'P570'):
+					ret.append(self.getDeathLine(self.allDatas[t]))
 		return ret
 
 	def getAllBirth(self):
@@ -178,9 +183,10 @@ class WikiDate :
 
 	def getBirth(self):
 		ret = []
-		for t in self.allKeys:
-			if (self.allDatas[t]['code'] == 'P569'):
-				ret.append(self.getBirthLine(self.allDatas[t]))
+		if (self.allKeys):
+			for t in self.allKeys:
+				if (self.allDatas[t]['code'] == 'P569'):
+					ret.append(self.getBirthLine(self.allDatas[t]))
 		return ret
 		
 
@@ -196,17 +202,20 @@ class WikiDate :
 	def getEvents(self):
 		self.unknown = []
 		ret = []
-		for t in self.allKeys:
-			code = self.allDatas[t]['code']
-			if code in DICTIONNARY:
-				ret.append(DICTIONNARY[code] % (self._getLink(self.allDatas[t])))
-			else:
-				if code not in self.unknown:
-					self.unknown.append(code)
+		if self.allKeys:
+			for t in self.allKeys:
+				code = self.allDatas[t]['code']
+				if code in DICTIONNARY:
+					ret.append(DICTIONNARY[code] % (self._getLink(self.allDatas[t])))
+				else:
+					if code not in self.unknown:
+						self.unknown.append(code)
 		return ret
 
 
 	def getWikiPage(self):
+		if (not self.allKeys):
+			self.buildPage()
 		ret = "{{ébauche|chronologie}}"
 		ret+= "{{Création automatique|DickensBot|date=%s}}\n" % (Tools.getFrenchDate())
 		ret+= "{{Infobox Jour|%s|%s|%s}}\n" % (self.d, self.m, self.y)

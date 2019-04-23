@@ -55,7 +55,9 @@ class WikiMonth :
 
 		for i in range(1,32):
 			try:
-				self.allDays.append(WikiDate(i,m,y))
+				d = WikiDate(i,m,y)
+				d.buildPage()
+				self.allDays.append(d)
 			except:
 				None
 
@@ -92,6 +94,7 @@ class WikiMonth :
 	def getOtherEvents(self, prefix = "* "):
 
 		ret = ""
+		
 		for d in self.allDays:
 			evts = d.getEvents()
 			ret += self.getLines(d.dayMonth, evts)

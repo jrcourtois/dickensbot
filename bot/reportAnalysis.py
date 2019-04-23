@@ -47,7 +47,7 @@ a = Analysis(site)
 a.run()
 
 
-YEAR = [2015, 2016, 2017, 2018]
+YEAR = [2017, 2018,2019]
 MONTH = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"]
 # orphelins 
 for y in YEAR:
