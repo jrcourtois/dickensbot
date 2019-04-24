@@ -33,7 +33,7 @@ for subCatPage in c.getAllMembersGen():
 c = Category(Site.site, "Article orphelin")
 for subCatPage in c.getAllMembersGen():
 	a = 0
-	if subCatPage.title.startswith("Catégorie:Article"):
+	if "depuis" in subCatPage.title:
 		subCat = Category(Site.site, subCatPage.title)
 		for p in subCat.getAllMembersGen():
 			a += 1
