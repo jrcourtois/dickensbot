@@ -27,7 +27,7 @@ def isFromCat(cats, catStart):
 	return False
 
 def isOrphanCat(l):
-	return isFromCat(l,"Tous les articles orphelins")
+	return isFromCat(l,"Article orphelin/Liste complète")
 
 def getPortail(l):
 	ret = []
