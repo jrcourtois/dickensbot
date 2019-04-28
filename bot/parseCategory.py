@@ -15,23 +15,44 @@ cat = Category(Site.site,catName)
 
 tab = cat.getAllMembers(True)
 
-pages = {}
-orphan0 = []
-orphan1 = []
-orphan2 = []
+trt = open("files/trt.wiki")
 
-i = 0
-for p in tab:
-	i+=1
-#	Tools.printProgress(i, len(tab))
-	page = OrphanPage(p)
-	if page.getNbLinks()==0:
-		orphan0.append(p)
-	if page.getNbLinks()==1:
-		orphan1.append(p)
-	if page.getNbLinks()==2:
-		orphan2.append(p)
-		
+treated = trt.read().splitlines()
+
+trt.close()
+
+orp0 = open("files/orp0.wiki","a+")
+orp1 = open("files/orp1.wiki","a+")
+orp2 = open("files/orp2.wiki","a+")
+trt = open("files/trt.wiki","w")
+
+
+try:
+	i = 0
+	for p in tab:
+		i+=1
+		print(p, file=trt)
+		if (p not in treated):
+			Tools.printProgress(i, len(tab))
+			page = OrphanPage(p)
+			if page.getNbLinks()==0:
+				print(p,file=orp0)
+			if page.getNbLinks()==1:
+				print(p,file=orp1)
+			if page.getNbLinks()==2:
+				print(p,file=orp2)
+except:
+	print ("INTERROMPU")
+orp0.close()
+orp1.close()
+orp2.close()
+trt.close()
+
+orphan0 = open("files/orp0.wiki").read().splitlines()
+orphan1 = open("files/orp1.wiki").read().splitlines()
+orphan2 = open("files/orp2.wiki").read().splitlines()
+
+
 print("== Orphelins ==")
 print("''Orphelins : %d''" % len(orphan0))
 print("{{colonnes|taille=30|")
@@ -50,7 +71,7 @@ print("{{colonnes|taille=30|")
 for p in orphan2:
 	print("* [[%s]]" % p)
 print("}}")
-print("Non orphelins : %d" % (i - len(orphan0) - len(orphan1) - len(orphan2)))
+print("Non orphelins : %d sur %d" % (i - len(orphan0) - len(orphan1) - len(orphan2), i))
 
 
 
