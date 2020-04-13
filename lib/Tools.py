@@ -1,21 +1,23 @@
 # -*- coding: utf8 -*-
-from wikitools import Page
+from wikitools.page import Page
 from wikitools import api
 import re
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import time
 import Site
 import sys
 
 def addModele(txt, modele):
 	tab = txt.split("\n")
-	newTxt = u""
+	newTxt = ""
 	l = 0
+	if "Taxobox" in txt:
+		return modele + "\n" + txt
 	for line in tab:
 		if line.startswith("{") and line.endswith("}"):
-			newTxt += line.decode("utf8") + "\n"
+			newTxt += line + "\n"
 		else:
-			return newTxt.encode("utf8") + modele.encode("utf8") + "\n" + "\n".join(tab[l:])
+			return newTxt + modele + "\n" + "\n".join(tab[l:])
 		l+=1
 def isFromCat(cats, catStart):
 
@@ -25,7 +27,7 @@ def isFromCat(cats, catStart):
 	return False
 
 def isOrphanCat(l):
-	return isFromCat(l,"Tous les articles orphelins")
+	return isFromCat(l,"Article orphelin/Liste complète")
 
 def getPortail(l):
 	ret = []
@@ -33,8 +35,8 @@ def getPortail(l):
 		if cat.find("Portail") > -1:
 			ret.append(cat)
 	return ret
-month = {'01': 'janvier', '02':u"février", "03" : "mars", "04" : "avril", "05":"mai","06":"juin",
-			'07':'juillet', '08':u'août', '09':'septembre','10':'octobre', '11':'novembre', '12':u'décembre'}
+month = {'01': 'janvier', '02':"février", "03" : "mars", "04" : "avril", "05":"mai","06":"juin",
+			'07':'juillet', '08':'août', '09':'septembre','10':'octobre', '11':'novembre', '12':'décembre'}
 
 def getFrenchDate():
 	return month[time.strftime("%m")] + " " + time.strftime("%Y")
@@ -54,37 +56,46 @@ def printProgress(indice, top):
 	sys.stdout.flush()
 
 def addPalette(page, title, adopt = False):
-	txt = page.getWikiText().decode("utf8")
+	txt = page.getWikiText()
 	match = re.search(r"\{\{[P|p]alette.(.+?)\}\}", txt) 
 	if match:
 		for elem in match.group(1).split("|"):
-			if re.match(ur"" + title + r"$",elem) or elem == title:
-				print ("deja la")
+			if elem == title:
+				print(("deja la"))
 				return
 		txt = re.sub(r"\{\{([P|p]alette).(.*)\}\}", r"{{\1|\2|"+title+"}}",txt)
 	else:
 		if re.search(r"\{\{[P|p]ortail.*\}\}", txt):
 			txt = re.sub(r"(\{\{[P|p]ortail.*\}\})", "{{Palette|"+title+"}}\n" + r"\1",txt)
 		else:
-			print ("pas de portail")
+			print(("pas de portail"))
 	if (adopt):
 		txt = re.sub(r"\{\{[O|o]rph.*?\}\}\n?", "", txt)
 
 	commentaire = "Ajout de la palette: ''"+ title + "''"
-	page.edit(txt.encode("utf8"), summary=commentaire.encode("utf8"),bot=True)
+	page.edit(txt, summary=commentaire,bot=True)
 
 
 def getFrenchPage(site, page):
 	params = {'action':'query', 'prop':'langlinks', 'titles':page}
 	request = api.APIRequest(site, params)
-	result = request.query(False)
+	try:
+		result = request.query(False)
+	except urllib.error.HTTPError:
+		print("Unable to handle request %s" % params)
+		return None
 	for p in result['query']['pages']:
 		links = []
-		if result['query']['pages'][p].has_key('langlinks'):
+		if 'langlinks' in result['query']['pages'][p]:
 			links = result['query']['pages'][p]['langlinks']
 		for l in links:
 			if (l['lang'] == 'fr'):
-				return Page(Site.site, l['*'])
+				if type(l['*']) is str:
+					pageTitle = l['*']
+				else:
+					pageTitle = l['*'].decode("utf8")
+				print("getFrenchPage : %s" % pageTitle)
+				return Page(Site.site, pageTitle)
 	return None
 def setOrphan(p):
 	ret = ""
@@ -97,6 +108,7 @@ def setOrphan(p):
 		return "nobots"
 	if new.lower().find("{{portail") == -1:
 		 ret = "------ NO PORTAIL ----------"
+
 	new = addModele(new, "{{orphelin|date="+getFrenchDate()+"}}")
 	p.edit(new, nocreate="True", summary="article orphelin", bot=True)
 	return ret
@@ -104,20 +116,22 @@ def setOrphan(p):
 def appendCat(page, cat, key):
 	cats = page.getCategories()
 	if not isFromCat(cats, cat):
-		print (page.title)
+		print((page.title))
 		txt = page.getWikiText()
 		if key:
 			catKey = cat + "|" + key
 		else:
 			catKey = cat
 		if txt.endswith("\n"):
-			catTxt = u"[[Catégorie:"+catKey+"]]\n"
+			catTxt = "[[Catégorie:"+catKey+"]]\n"
 		else:
-			catTxt = u"\n[[Catégorie:"+catKey+"]]\n"
-		page.edit(appendtext=catTxt.encode("utf8"), summary = u"[bot] Ajout de la catégorie : [["+cat+"]]".encode("utf8"), bot=True)
+			catTxt = "\n[[Catégorie:"+catKey+"]]\n"
+		page.edit(appendtext=catTxt.encode("utf8"), summary = "[bot] Ajout de la catégorie : [["+cat+"]]".encode("utf8"), bot=True)
 
 def setOrphanIfNeeded(p):
 	cat = p.getCategories()
+	if p.isHomo():
+		return 0
 	if ( not isOrphanCat(cat)):
 		setOrphan(p)
 		return 1

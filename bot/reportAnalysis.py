@@ -1,55 +1,65 @@
 # -*- coding: utf8 -*-
 from Analysis import Analysis
-from wikitools import Page
+from wikitools.page import Page
 from Site import site
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 
 SITE_JR = "http://www.jrcourtois.net/wiki/"
 
-print "Modeles"
-models = urllib.urlopen(SITE_JR + "models.wiki")
-modelPage = Page(site,"Utilisateur:DickensBot/Modeles")
-modelPage.edit(text = models.read(), summary = u"Mise à jour", bot=True)
+print("Modeles")
+try:
+	models = urllib.request.urlopen(SITE_JR + "models.wiki")
+	modelPage = Page(site,"Utilisateur:DickensBot/Modeles")
+except urllib.error.HTTPError as e:
+	print ("models.wiki was missing")
+
+
+modelPage.edit(text = models.read().decode("utf8"), summary = "Mise à jour", bot=True)
 
 def printPageFromFile(page, fileName):
-	s = urllib.urlopen(SITE_JR + fileName)
-	if s.getcode() != 200:
+	try:
+		s = urllib.request.urlopen(SITE_JR + "arch/" + fileName)
+	except urllib.error.HTTPError as e:
+		print("File not found: %s" % fileName)
 		return
+	if s.getcode() != 200:
+		print("File not found: %s" % fileName)
+		return
+	print(("%s => %s" % (fileName,catName)))
 	lines = s.readlines()
-	print u"%s => %s" % (fileName,catName)
-	ret = "{|class='wikitable sortable'\n"
+	if len(lines) == 0:
+		print ("Empty file")
+		return
+	ret = "Il y a %d articles sur cette page et {{PAGESINCATEGORY:%s}} dans [[:Catégorie:%s]]\n" % (len(lines), page, page)
+	ret+= "\n{{Utilisateur:DickensBot/analysis/entete}}\n"
+	ret+= "{|class='wikitable sortable'\n"
 	ret += "!Titre!!Nb links!!Nb pages traduites!!tpl !! en page !! de page !! es page !! models !! admisssible \n"
 	for l in lines:
 		ret += "|-\n"
-		ret += l
+		ret += l.decode("utf8")
 	ret +="|-\n"
-	ret+= "|}"
-	p = Page(site, page + "/analysis")
-	p.edit(text = ret, summary=str(len(lines)) + " articles à adopter",bot=True)
+	ret+= "|}\n"
+	ret+= "{{Palette Articles orphelins}}"
+	p = Page(site, "Utilisateur:DickensBot/analysis/" + page )
+	p.edit(text = ret, summary=str(len(lines)) + " articles à adopter", bot=True)
 
 a = Analysis(site)
 a.run()
 
 
-YEAR = [2013, 2014, 2015, 2016, 2017]
-MONTH = [u"janvier", u"février", u"mars", u"avril", u"mai", u"juin", u"juillet", u"août", u"septembre", u"octobre", u"novembre", u"décembre"]
+YEAR = [2018,2019, 2020]
+MONTH = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"]
 # orphelins 
 for y in YEAR:
-	m =1
+	m = 1
 	for mon in MONTH:
-		catName = u"Catégorie:Article orphelin depuis %s %d" %(mon, y)
-		fileName= u"orph_%d-%02d.arch" % (y, m)
-		try:
-			printPageFromFile(catName, fileName)
-		except:
-			print "problem with %s" % catName
-		catName = u"Catégorie:Wikipédia:Tentative d'adoption en %s %d" %(mon, y)
-		fileName= u"tent_%d-%02d.arch" % (y, m)
-		try:
-			printPageFromFile(catName, fileName)
-		except:
-			print "problem with %s" % catName
+		catName = "Article orphelin depuis %s %d" %(mon, y)
+		fileName= "orph_%d-%02d.arch" % (y, m)
+		printPageFromFile(catName, fileName)
+		catName = "Wikipédia:Tentative d'adoption en %s %d" %(mon, y)
+		fileName= "tent_%d-%02d.arch" % (y, m)
+		printPageFromFile(catName, fileName)
 		m += 1
 
 

@@ -1,21 +1,19 @@
 # -*- coding: utf8 -*-
-from wikitools import Page
+from wikitools.page import Page
 from QuickIntersection import QuickIntersection
 import Site
 import re
-from pprint import pprint
-import time
 
 reStart = re.compile(".*start: (\d+) pages", re.MULTILINE)
-reDate = re.compile(u".*date\((.+)\)", re.MULTILINE)
+reDate = re.compile(".*date\((.+)\)", re.MULTILINE)
 
 class ProjectCategory:
 	def __init__(self,p,date):
 		self.catName = p
 		self.date = date
-		self.portail = "Portail:" + p + u"/Articles liés"
+		self.portail = "Portail:" + p + "/Articles liés"
 		allOrphans= QuickIntersection(["Article orphelin", self.portail])
-		adm = QuickIntersection(["Article orphelin", self.portail, u"Tous les articles dont l'admissibilité est à vérifier"])
+		adm = QuickIntersection(["Article orphelin", self.portail, "Tous les articles dont l'admissibilité est à vérifier"])
 		self.getOldPage()
 		self.count = allOrphans.getPageCount()
 		self.pages = allOrphans.getPages()
@@ -46,7 +44,7 @@ class ProjectCategory:
 		return len(self.orph) + len(self.tent)
 
 	def getWikiLink(self):
-		return u"[[Projet:" + self.catName  + u"/Articles orphelins|"+self.catName+u"]]"
+		return "[[Projet:" + self.catName  + "/Articles orphelins|"+self.catName+"]]"
 
 	def getProjectPage(self):
 		return self.projectPage
@@ -59,7 +57,7 @@ class ProjectCategory:
 
 	def getParent(self):
 		if self.parentProject:
-			return self.parentProject.getWikiLink() + u"\n\n"
+			return self.parentProject.getWikiLink() + "\n\n"
 		return "--Racine--\n\n"
 	
 	def hasParent(self):
@@ -94,14 +92,14 @@ class ProjectCategory:
 	def getOldLinks(self):
 		ret = []
 		for page in self.projectPage.getLinks():
-			if page.startswith("Portail:") or page.startswith("Projet:") or page.startswith(u"Wikipédia:") or page.startswith("Discussion"):
+			if page.startswith("Portail:") or page.startswith("Projet:") or page.startswith("Wikipédia:") or page.startswith("Discussion"):
 				return ret
 			ret.append(page)
 		return ret
 
 	def getOrphans(self):
-		self.orphLast = QuickIntersection([u"Article orphelin depuis " + self.date, self.portail]).getPages()
-		self.tentLast = QuickIntersection([u"Wikipédia:Tentative d'adoption en " + self.date, self.portail]).getPages()
+		self.orphLast = QuickIntersection(["Article orphelin depuis " + self.date, self.portail]).getPages()
+		self.tentLast = QuickIntersection(["Wikipédia:Tentative d'adoption en " + self.date, self.portail]).getPages()
 		self.adopt = []
 		if self.startCount != -1:
 			for a in self.getOldLinks():
@@ -110,9 +108,9 @@ class ProjectCategory:
 		self.tent =   []
 		allTentatives = []
 		try:
-			allTentatives = QuickIntersection([u"Wikipédia:Tentative d'adoption", self.portail]).getPages()
+			allTentatives = QuickIntersection(["Wikipédia:Tentative d'adoption", self.portail]).getPages()
 		except:
-			print "No tentative found"
+			print("No tentative found")
 		for t in allTentatives:
 			if t not in self.tentLast:
 				self.tent.append(t)
@@ -123,73 +121,74 @@ class ProjectCategory:
 
 
 	def getMessage(self):
-		s = u"\n== Articles orphelins à adopter ==\n"
-		s+= u"<!-- DickensDate(" + self.date + u") -->\n"
-		s+= u"{{adoption/message|name=%s|count=%d|previousCount=%d}}" % (self.catName, self.getCount(), self.getStartCount())
-		s+= u"\n~~~~"
+		s = "\n== Articles orphelins à adopter ==\n"
+		s+= "<!-- DickensDate(" + self.date + ") -->\n"
+		s+= "{{adoption/message|name=%s|count=%d|previousCount=%d}}" % (self.catName, self.getCount(), self.getStartCount())
+		s+= "\n~~~~"
 		return s.encode("utf8")
 
 	def getPageText(self):
-		s= u"=== Articles orphelins ===\n"
-		s+= u"{{adoption/orphelins|"+str(len(self.orph))+"}}\n"
+		s= "=== Articles orphelins ===\n"
+		s+= "{{adoption/orphelins|"+str(len(self.orph))+"}}\n"
 		s+= self.getPageArray(self.orph)
-		s+= u"==== Orphelins depuis ce mois-ci  ====\n"
-		s+= u"{{adoption/orphLast|"+str(len(self.orphLast))+"}}\n"
+		s+= "==== Orphelins depuis ce mois-ci  ====\n"
+		s+= "{{adoption/orphLast|"+str(len(self.orphLast))+"}}\n"
 		s+= self.getPageArray(self.orphLast)
-		s+= u"==== Tentative  ====\n"
-		s+= u"{{adoption/visited|"+str(len(self.tent))+"}}\n"
+		s+= "==== Tentative  ====\n"
+		s+= "{{adoption/visited|"+str(len(self.tent))+"}}\n"
 		s+= self.getPageArray(self.tent)
-		s+= u"==== Tentatives ce mois-ci ====\n"
-		s+= u"{{adoption/visitedLast|"+str(len(self.tentLast))+"}}\n"
+		s+= "==== Tentatives ce mois-ci ====\n"
+		s+= "{{adoption/visitedLast|"+str(len(self.tentLast))+"}}\n"
 		s+= self.getPageArray(self.tentLast)
-		s+= u"=== Articles traités ===\n"
-		s+= u"{{adoption/adopted|"+str(len(self.adopt))+"}}\n"
+		s+= "=== Articles traités ===\n"
+		s+= "{{adoption/adopted|"+str(len(self.adopt))+"}}\n"
 		#s+= self.getPageArray(self.adopt)
 		return s
 
 	def getPageArray(self, pages):
 		s = ""
 		for l in pages:
+			title = l['page_title'].replace("_", " ")
 			if l in self.admissibles:
-				s+="# ''[[" + l.replace("_", " ") + "]]''\n"
+				s+="# ''[[" + title + "]]''\n"
 			else:
-				s+="# [[" + l.replace("_", " ") + "]]\n"
+				s+="# [[" + title + "]]\n"
 		if (len(pages) > 4):
 			return "{{Colonnes|taille=30|\n" + s + "}}\n"
 		else:
 			return s
 	
 	def getHeader(self):
-		s = u"{{Mise à jour bot|Jrcourtois|période=}}\n"
-		s+= u"{{adoption}}\n"
-		s+= u"== Liste des articles orphelins ==\n"
-		s+= u"{{adoption/intro|" + str(self.getCount()) +  u"|" + self.catName + u"}}\n"
-		s+= u"<!-- start: " + str(self.getStartCount()) + u" pages -->\n"
-		s+= u"<!-- date(" + self.date + u") -->\n"
+		s = "{{Mise à jour bot|Jrcourtois|période=}}\n"
+		s+= "{{adoption}}\n"
+		s+= "== Liste des articles orphelins ==\n"
+		s+= "{{adoption/intro|" + str(self.getCount()) +  "|" + self.catName + "}}\n"
+		s+= "<!-- start: " + str(self.getStartCount()) + " pages -->\n"
+		s+= "<!-- date(" + self.date + ") -->\n"
 		s+= self.getArbo()
 		return s
 
 	def getArbo(self):
-		s = u"\n\n" + self.getParent()
-		s+= u"'''" + self.catName + u"'''\n\n" 
+		s = "\n\n" + self.getParent()
+		s+= "'''" + self.catName + "'''\n\n" 
 		for p in self.subProject:
-			s+= p.getWikiLink() + u" - "
+			s+= p.getWikiLink() + " - "
 		return s + "\n\n"
 
 
 	def getOldPage(self):
 		self.projectPage = Page(Site.site, "Projet:" + self.catName + "/Articles orphelins")
 		if self.projectPage.exists:
-			self.oldText = self.projectPage.getWikiText().decode("utf8")
+			self.oldText = self.projectPage.getWikiText()
 			try:
 				self.startCount = int(reStart.search(self.oldText).group(1))
 			except:
-				print "no count found"
+				print("no count found")
 				self.startCount = -1
 			try:
 				date = reDate.search(self.oldText).group(1)
 			except:
-				print "no date found"
+				print("no date found")
 				date =""
 			if (date != self.date):
 				self.startCount = -1
@@ -200,9 +199,9 @@ class ProjectCategory:
 		self.getOrphans()
 		summary = "MAJ: " + str(self.getCount())
 		to = self.getHeader() + self.getPageText()
-		print summary + " - " + self.catName
-		t = ProjectCategory.getBotTxt(self.oldText, to).encode("utf8")
-		print self.projectPage.title
+		print(summary + " - " + self.catName)
+		t = ProjectCategory.getBotTxt(self.oldText, to)
+		print(self.projectPage.title)
 		self.projectPage.edit(text=t,summary = summary,bot=True)
 
 	@staticmethod
@@ -212,4 +211,4 @@ class ProjectCategory:
 			return t
 	
 		else:
-			return u"<!-- BEGIN BOT SECTION -->\n" + toTxt + "\n<!-- END BOT SECTION -->"
+			return "<!-- BEGIN BOT SECTION -->\n" + toTxt + "\n<!-- END BOT SECTION -->"

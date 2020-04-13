@@ -1,24 +1,28 @@
 # -*- coding: utf8 -*-
-from wikitools import Page
+from wikitools.page import Page
 import Site
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import re
+from wikitools.exceptions import APIQueryError
 
-print "Adoption"
-adopte = urllib.urlopen("http://www.jrcourtois.net/wiki/adopte.wiki")
+print("Adoption")
+adopte = urllib.request.urlopen("http://www.jrcourtois.net/wiki/adopte.wiki")
 i=0
 for l in adopte:
 	i+=1
-	print l
-	m = re.match(r'# \[\[(.*)\]\]', l)
+	m = re.match(br"# \[\[(.*)\]\]", l)
 	if m:
-		try:
-			title = m.group(1)
-			adopted = Page(Site.site,title)
-			txt = adopted.getWikiText()
-			txt = re.sub(r"\{\{[O|o]rph.*?\}\}\n?", "", txt)
-			adopted.edit(txt, summary = u"Article adopt\xe9 !".encode("utf8"),bot=True)
-		except Exception as e:
-			print "Except:" , e
+		title = m.group(1).decode("utf8")
+		adopted = Page(Site.site, title)
+		oldTxt = adopted.getWikiText()
+		txt = re.sub(r"\{\{[O|o]rph.*?\}\}\n?", "", oldTxt)
+		if txt == oldTxt:
+			print ("Bandeau absent")
+		else:
+			try:
+				print (adopted.edit(txt, summary = "Article adopté !",bot=True))
+			except APIQueryError:
+				print("%s has not been adopted" % title)
+
 
 

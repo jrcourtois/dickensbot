@@ -2,6 +2,7 @@
 import re
 from wikitools import api
 from wikitools import pagelist
+import wikitools
 import Site
 import Tools
 from OrphanPage import OrphanPage
@@ -27,25 +28,29 @@ orphans = []
 
 for p in pages:
 	if p.namespace > 0:
-		print p.title + ": not an article"
+		print(("%s : not an article" % p.title))
 		continue
-	if p.isRedir():
-		print p.title + ": redirect"
+	try:
+		if p.isRedir():
+			print(("%s : redirect" % p.title))
+			continue
+	except wikitools.exceptions.NoPage:
+		print ("%s: not found" % p.title)
 		continue
 	p.setPageInfo()
 	if int(p.pageid) < 1:
-		print p.title + ": del"
+		print(("%s : del" % p.title))
 		continue
 	orphan = OrphanPage(p.title)
-	if orphan.toAdopt():
-		print p.title + ": already adopted"
+	if orphan.toAdopt(0):
+		print(("%s : already adopted" % p.title))
 		continue
 	cat = p.getCategories()
 	if ( not Tools.isOrphanCat(cat)):
-		print Tools.setOrphan(p)
+		print((Tools.setOrphan(p)))
 		orphans.append(p)
 	else:
-		print p.title + ": tpl already added"
+		print(("%s : tpl already added" % p.title))
 
-print( "**** " + str(len(orphans)) + " orphans")
+print(( "**** " + str(len(orphans)) + " orphans"))
 

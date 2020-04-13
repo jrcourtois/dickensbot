@@ -1,12 +1,9 @@
 # -*- coding: utf8 -*-
-from wikitools import Category
-import time
 import re
-import pprint
-from wikitools import Page
+from wikitools.page import Page
 from wikitools import api
-import argparse
-import urllib
+import urllib.request, urllib.parse, urllib.error
+import time
 
 class Analysis:
 
@@ -18,7 +15,7 @@ class Analysis:
 		self.MODEL_NAME = "Utilisateur:DickensBot/Analysis"
 		self.MODEL_TOP = self.MODEL_NAME + "/top"
 		self.MODEL_BOTTOM = self.MODEL_NAME + "/bottom"
-		self.articles = urllib.urlopen("http://www.jrcourtois.net/wiki/last.arch").readlines()
+		self.articles = urllib.request.urlopen("http://www.jrcourtois.net/wiki/arch/last.arch").readlines()
 	
 	def getLinks(self, link):
 	   params = {'action':'query', 'eititle' : link, 'list':'embeddedin'}
@@ -28,40 +25,40 @@ class Analysis:
 
 
 	def getNextArticles(self, nb):
-	   i = 0
-	   ret = ""
-	   while i < int(nb) and self.Count + i < len(self.articles):
-		  ret +="|-\n"
-		  ret += self.articles[self.Count+i]
-		  i+=1
-	   self.Count+=i
-	   self.nbLine = i
-	   return ret
+		i = 0
+		ret = ""
+		while i < int(nb) and self.Count + i < len(self.articles):
+			ret +="|-\n"
+			ret += self.articles[self.Count+i].decode("utf8")
+			i+=1
+		self.Count+=i
+		self.nbLine = i
+		return ret
 
 	def run(self):
 
 		links = self.getLinks(self.MODEL_TOP)
 		for l in reversed(links):
 			t = l['title']
-			print t
+			print(t)
 			p = Page(self.site, t)
 			lines =  p.getWikiText().splitlines()
 			b_print = True
 			ret = ""
-			for l in lines:
-				m = re.search(self.MODEL_TOP, l)
+			for line in lines:
+				m = re.search(self.MODEL_TOP, line)
 				if m:
-					m = re.search(self.MODEL_TOP+"\|nb=(\d+)", l)
+					m = re.search(self.MODEL_TOP+"\|nb=(\d+)", line)
 					if m:
-						ret += l + "\n" + self.getNextArticles(m.group(1)) + "\n"
+						ret += line + "\n" + self.getNextArticles(m.group(1)) + "\n"
 					else:
-						ret += l + "\n" + self.getNextArticles(5) + "\n"
+						ret += line + "\n" + self.getNextArticles(5) + "\n"
 					b_print = False
-				m = re.search(self.MODEL_BOTTOM, l)
+				m = re.search(self.MODEL_BOTTOM, line)
 				if m:
 					b_print=True
 				if b_print:
-					ret+= l + "\n"
+					ret+= line + "\n"
 
 			p.edit(text = ret, summary=str(self.nbLine) + " articles à adopter",bot=True)
 			time.sleep(1)

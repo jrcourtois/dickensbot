@@ -15,7 +15,7 @@ class Report(object):
 		page = OrphanPage(p)
 		if page.toAdopt():
 			self.adopted_cnt += 1
-			self.desorphan_f.write("# [[" + p.encode("utf-8") + "]]\n") 
+			self.desorphan_f.write("# [[" + p + "]]\n") 
 			return
 		if page.getNbItlModels()>0:
 			self.withModel += 1
@@ -29,9 +29,9 @@ class Report(object):
 
 	def printReport(self):
 
-		print str(self.withModel) + " page(s) with model"  
-		print str(len(self.models)) + " model(s)" 
-		print str(self.adopted_cnt) + " orphans adopted" 
+		print(str(self.withModel) + " page(s) with model")  
+		print(str(len(self.models)) + " model(s)") 
+		print(str(self.adopted_cnt) + " orphans adopted") 
 
 
 		self.models_f.write("{|class='wikitable sortable'\n")
@@ -39,11 +39,11 @@ class Report(object):
 		self.models_f.write("|-\n")
 		i = 0
 		for m in self.models:
-			print m.encode("utf8")
+			print(m.encode("utf8"))
 			if (len(self.models[m]) > 1): 
-				self.models_f.write("|[[:" + m.encode("utf8") + "]] ||" + str(len(self.models[m])) + "||")
+				self.models_f.write("|[[:" + m + "]] ||" + str(len(self.models[m])) + "||")
 				for a in self.models[m]:
-					self.models_f.write("[[" + a.encode("utf8") + "]], ")
+					self.models_f.write("[[" + a + "]], ")
 				self.models_f.write("\n|-\n")
 		self.models_f.write("|}")
 		self.models_f.close()

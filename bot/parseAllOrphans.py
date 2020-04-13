@@ -1,5 +1,5 @@
 # -*- coding: utf8 -*-
-from wikitools import Category
+from wikitools.category import Category
 from Report import Report
 import Site
 import time
@@ -15,12 +15,12 @@ This script does also a report, and put it on the wiki.
 """
 
 start = time.time()
-print "Start : " + time.strftime("%H:%M:%S", time.localtime(start) )+ "\n"
+print("Start : " + time.strftime("%H:%M:%S", time.localtime(start) )+ "\n")
 
 report = Report()
 
 i = 0
-c = Category(Site.site, u"Catégorie:Wikipédia:Tentative d'adoption")
+c = Category(Site.site, "Catégorie:Wikipédia:Tentative d'adoption")
 for subCatPage in c.getAllMembersGen():
 	a = 0
 	subCat = Category(Site.site, subCatPage.title)
@@ -33,7 +33,7 @@ for subCatPage in c.getAllMembersGen():
 c = Category(Site.site, "Article orphelin")
 for subCatPage in c.getAllMembersGen():
 	a = 0
-	if subCatPage.title.startswith(u"Catégorie:Article"):
+	if "depuis" in subCatPage.title:
 		subCat = Category(Site.site, subCatPage.title)
 		for p in subCat.getAllMembersGen():
 			a += 1
@@ -43,14 +43,14 @@ for subCatPage in c.getAllMembersGen():
 	i += a
 
 
-print "Total : " + str(i)
+print("Total : " + str(i))
 
 
 end = time.time()
-print "Start : " + time.strftime("%H:%M:%S", time.localtime(start) )+ "\n"
+print("Start : " + time.strftime("%H:%M:%S", time.localtime(start) )+ "\n")
 report.printReport()
-print " Fin  du parcours des orphelins : " + time.strftime("%H:%M:%S", time.localtime(end) ) + "\n"
+print(" Fin  du parcours des orphelins : " + time.strftime("%H:%M:%S", time.localtime(end) ) + "\n")
 
 end = time.time()
-print "it tooks : " + time.strftime("%H:%M:%S", time.gmtime(end- start))
+print("it tooks : " + time.strftime("%H:%M:%S", time.gmtime(end- start)))
 

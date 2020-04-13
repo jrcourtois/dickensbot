@@ -2,10 +2,10 @@
 import re
 from wikitools import api
 from wikitools import category
-from Site import site
+from .Site import site
 import datetime 
 
-MONTH = [u"janvier", u"février", u"mars", u"avril", u"mai", u"juin", u"juillet", u"août", u"septembre", u"octobre", u"novembre", u"décembre"]
+MONTH = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"]
 
 WEEK = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"]
 
@@ -34,60 +34,60 @@ class AlmanachDate :
 		request = api.APIRequest(site, params)
 		result = request.query(False)
 		self.articles = result['query']['search']
-		print u"%s : %d pages " % (self.date, len(self.articles))
+		print("%s : %d pages " % (self.date, len(self.articles)))
 
 	def findBirth(self, s):
-		m = re.search(u"n.*? (\d\d? \w+ \d+)", s, re.U)
+		m = re.search("n.*? (\d\d? \w+ \d+)", s, re.U)
 		if (m):
 			if m.group(1) != self.date :
 				return m.group(1)
-		m = re.search(u"(\d\d? \w+ \d+).+?(\d\d? \w+ \d+)", s, re.U)
+		m = re.search("(\d\d? \w+ \d+).+?(\d\d? \w+ \d+)", s, re.U)
 		if (m):
 			if m.group(1) != self.date :
 				return m.group(1)
 		return "XXX"
 
 	def findDeath(self, s):
-		m = re.search(u"m.*? (\d\d? \w+ \d+)", s, re.U)
+		m = re.search("m.*? (\d\d? \w+ \d+)", s, re.U)
 		if (m):
 			if m.group(1) != self.date :
 				return m.group(1)
-		m = re.search(u"(\d\d? \w+ \d+).+?(\d\d? \w+ \d+)", s, re.U)
+		m = re.search("(\d\d? \w+ \d+).+?(\d\d? \w+ \d+)", s, re.U)
 		if (m):
 			if m.group(2) != self.date :
 				return m.group(2)
 		return ""
 
 	def findOther(self, s):
-		m = re.search(u"créé", s, re.U)
+		m = re.search("créé", s, re.U)
 		if (m):
-			return u"Création"
-		m = re.search(u"sort", s, re.U)
+			return "Création"
+		m = re.search("sort", s, re.U)
 		if (m):
-			return u"Sortie"
+			return "Sortie"
 		return False
 
 	def getWikiPage(self):
-		ret = u"{{Création automatique|DickensBot}}\n"
+		ret = "{{Création automatique|DickensBot}}\n"
 		ret+= "{{Infobox Jour|%s|%s|%s}}\n" % (self.d_num, self.m_num, self.y_num)
 		ret+= "\n"
-		ret+= u"Le %s '''%s %s %s''' est le %d{{e}} jour de l'année [[%s]]." % (self.dow, self.d, self.m, self.y_num, self.doy, self.y_num)
+		ret+= "Le %s '''%s %s %s''' est le %d{{e}} jour de l'année [[%s]]." % (self.dow, self.d, self.m, self.y_num, self.doy, self.y_num)
 		ret+= "\n"
 		if len(self.birthArray) > 0:
 			ret+= "\n== Naissances ==\n"
 			ret+= self.getBirths()
 		if len(self.deathArray) > 0:
-			ret+= u"\n== Décès ==\n"
+			ret+= "\n== Décès ==\n"
 			ret+=self.getDeaths()
 
-		ret+= u"\n== Autres événements ==\n"
+		ret+= "\n== Autres événements ==\n"
 		ret+= self.getOthers()
 		ret+= self.getLinked()
 
 		ret+= "\n== Voir aussi ==\n"
 		ret+= "* [[%s %s]] et [[%s %s]]\n" % (self.d,self.m,self.m,self.y_num)
 		 
-		ret+= u"\n{{Portail|années %s}}\n" % (self.decade)
+		ret+= "\n{{Portail|années %s}}\n" % (self.decade)
 		return ret
 
 	def parseAndCompare(self, almMonth):
@@ -114,48 +114,48 @@ class AlmanachDate :
 			else:
 				self.unlinked.append(p['title'])
 	def printSummary(self):
-		print "%s : %d born, %d died, %d connected, %d others" % (self.date, len(self.birthArray), len(self.deathArray),len(self.otherArray), len(self.linked) + len(self.unlinked))
+		print("%s : %d born, %d died, %d connected, %d others" % (self.date, len(self.birthArray), len(self.deathArray),len(self.otherArray), len(self.linked) + len(self.unlinked)))
 
 	def getBirths(self):
 		ret = ""
 		for b in self.birthArray:
 			if self.birthArray[b] == "":
-				ret+= u"* '''[[%s]]''', \n" % b
+				ret+= "* '''[[%s]]''', \n" % b
 			else:
-				ret+= u"* '''[[%s]]''' (mort le %s), \n" % (b, self.birthArray[b])
-			ret+= u"<!-- %s -->\n" % self.snippets[b]
+				ret+= "* '''[[%s]]''' (mort le %s), \n" % (b, self.birthArray[b])
+			ret+= "<!-- %s -->\n" % self.snippets[b]
 		return ret
 
 	def getDeaths(self):
 		ret = ""
 		for b in self.deathArray:
-			ret+= u"* '''[[%s]]''' (né le %s), \n" % (b, self.deathArray[b])
-			ret+= u"<!-- %s -->\n" % self.snippets[b]
+			ret+= "* '''[[%s]]''' (né le %s), \n" % (b, self.deathArray[b])
+			ret+= "<!-- %s -->\n" % self.snippets[b]
 		return ret
 
 	def getOthers(self):
 		ret = ""
 		for b in self.otherArray:
-			ret+= u"* [[%s]] ''(%s)''\n" % (b, self.otherArray[b])
-			ret+= u"<!-- %s -->\n" % self.snippets[b]
+			ret+= "* [[%s]] ''(%s)''\n" % (b, self.otherArray[b])
+			ret+= "<!-- %s -->\n" % self.snippets[b]
 		return ret
 
 	def getLinked(self):
 		ret = ""
 		for b in self.linked:
-			ret+= u"* [[%s]]" % b
-			ret+= u"<!-- %s -->\n" % self.snippets[b]
+			ret+= "* [[%s]]" % b
+			ret+= "<!-- %s -->\n" % self.snippets[b]
 		return ret
 	def getAll(self):
 		ret = ""
 		for b in self.otherArray:
-			ret+= u"* [[%s]] ''(%s)''\n" % (b, self.otherArray[b])
-			ret+= u"<!-- %s -->\n" % self.snippets[b]
+			ret+= "* [[%s]] ''(%s)''\n" % (b, self.otherArray[b])
+			ret+= "<!-- %s -->\n" % self.snippets[b]
 		for b in self.linked:
-			ret+= u"* [[%s]]\n" % b
-			ret+= u"<!-- %s -->\n" % self.snippets[b]
+			ret+= "* [[%s]]\n" % b
+			ret+= "<!-- %s -->\n" % self.snippets[b]
 		for b in self.unlinked:
-			ret+= u"* [[%s]]\n" % b
+			ret+= "* [[%s]]\n" % b
 		return ret
 
 	def hasOther(self):
@@ -175,17 +175,17 @@ class AlmanachMonth:
 		self.linkedPage = []
 		for p in result['query']['backlinks']:
 			self.linkedPage.append(p['title'])
-		print u"%d pages linked to %s" % (len(self.linkedPage), self.month)
+		print("%d pages linked to %s" % (len(self.linkedPage), self.month))
 		# Récupération des articles liés à la catégorie du mois de naissance
-		month_birth = u"Catégorie:Naissance en " + self.month
+		month_birth = "Catégorie:Naissance en " + self.month
 		cat = category.Category(site, month_birth) 
 		self.birth = cat.getAllMembers(True)
-		print u"%d people born in %s" % (len(self.birth), self.month)
+		print("%d people born in %s" % (len(self.birth), self.month))
 		# Récupération des articles liés à la catégorie du mois de décès
-		month_death = u"Catégorie:Décès en " + self.month
+		month_death = "Catégorie:Décès en " + self.month
 		cat = category.Category(site, month_death) 
 		self.death = cat.getAllMembers(True)
-		print u"%d people died in %s" % (len(self.death), self.month)
+		print("%d people died in %s" % (len(self.death), self.month))
 
 	def getNum(self):
 		return MONTH.index(self.m) + 1
