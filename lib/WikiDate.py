@@ -8,6 +8,7 @@ from wikitools import api
 from wikitools import category
 from Site import site
 import Tools
+import pprint
 
 
 MONTH = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"]
@@ -70,7 +71,7 @@ class WikiDate :
 		return "%s %s" % (str(d), MONTH[m-1])
 
 	def _getArray(self, query):
-		#print(query)
+		pprint.pprint(requests.get(URL, params={'query': query, 'format': 'json'}))
 		data = requests.get(URL, params={'query': query, 'format': 'json'}).json()
 		born = {}
 		keys = []

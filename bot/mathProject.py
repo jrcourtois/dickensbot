@@ -44,9 +44,8 @@ for w in sorted(allCats, key=allCats.get, reverse=True):
 
 mathpage = Page(site, "Projet:Mathématiques/Articles orphelins")
 
-t = ProjectCategory.getBotTxt(mathpage.getWikiText(), text).encode("utf8")
+t = ProjectCategory.getBotTxt(mathpage.getWikiText(), text)
 summary = "MAJ: " + str(count)
-#print summary
-#print t
+#print (t)
 mathpage.edit(text=t,summary = summary,bot=True)
 

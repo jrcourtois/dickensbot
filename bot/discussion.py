@@ -13,21 +13,21 @@ cons = Page(site, "Utilisateur:Jrcourtois/SuiviSuppressions/conservations")
 
 liste = disc.getWikiText()
 
-page = [""]
+page = []
 articles = {}
 indice = 0
+page.insert(0,"")
 title = ""
 rePar = re.compile(r"==.*==")
 reTitle= re.compile(r"\{\{(.*)\|1=(.*?)\}\}")
-reDate = re.compile(r"(\d+\s.*?\s201.).*\d+\:\d\d\s\(CES?T\)$")
+reDate = re.compile(r"(\d+\s.*?\s202.).*\d+\:\d\d\s\(CES?T\)$")
 for line in liste.splitlines():
 	l = line
 	if rePar.match(l):
 		indice += 1
 		page.insert(indice, l + "\n") 
 	else:
-		if (page[indice]):
-			page[indice]+=  l + "\n"
+		page[indice]+=  l + "\n"
 
 	m = reTitle.search(l)
 	if m:

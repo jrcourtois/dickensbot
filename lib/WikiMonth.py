@@ -9,6 +9,7 @@ from wikitools import category
 from Site import site
 from WikiDate import WikiDate
 import Tools
+import time
 
 
 MONTH = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"]
@@ -56,6 +57,7 @@ class WikiMonth :
 		for i in range(1,32):
 			try:
 				d = WikiDate(i,m,y)
+				time.sleep(2)
 				d.buildPage()
 				self.allDays.append(d)
 			except:

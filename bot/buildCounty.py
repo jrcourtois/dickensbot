@@ -18,7 +18,7 @@ state = args.state
 try:
 	c = USCounty(county, state)
 	frenchPalette = c.buildPalette(t)
-	c.include()
+	c.includePalette()
 except RuntimeError as e:
 	print(("Error on %s : %s", (county, e)))
 	cError += 1
