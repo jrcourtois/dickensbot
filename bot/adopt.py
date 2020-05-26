@@ -6,7 +6,9 @@ import re
 from wikitools.exceptions import APIQueryError
 
 print("Adoption")
-adopte = urllib.request.urlopen("http://www.jrcourtois.net/wiki/adopte.wiki")
+#adopte = urllib.request.urlopen("http://www.jrcourtois.net/wiki/adopte.wiki")
+adopt_file = open("files/adopte.wiki")
+adopte = adopt_file.readlines()
 i=0
 for l in adopte:
 	i+=1
@@ -20,7 +22,7 @@ for l in adopte:
 			print ("Bandeau absent")
 		else:
 			try:
-				print (adopted.edit(txt, summary = "Article adopté !",bot=True))
+				print (adopted.edit(txt, summary = "Article [[Aide:Jargon_de_Wikipédia#Adopter_un_article_(rechercher)|adopté]] !",bot=True))
 			except APIQueryError:
 				print("%s has not been adopted" % title)
 
