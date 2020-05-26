@@ -130,7 +130,7 @@ class WikiDate :
 
 		link = self._getLink(elem)
 		if 'link' != "":
-				return "'''%s'''%s, %s" % (link, sdate, elem['desc'])
+				return "%s%s, %s" % (link, sdate, elem['desc'])
 		return ""
 
 	def _getLink(sefl, elem):

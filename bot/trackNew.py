@@ -19,6 +19,7 @@ params = {
 	'rcnamespace' : '0', 
 	'rcshow' : '!redirect',
 	'rclimit': COUNT,
+	'rcdir' : 'newer',
 	'rcstart': startStamp}
 
 r = api.APIRequest(site, params)

@@ -12,14 +12,12 @@ class ProjectCategory:
 		self.catName = p
 		self.date = date
 		self.portail = "Portail:" + p + "/Articles liés"
-		allOrphans= QuickIntersection(["Article orphelin", self.portail])
-		adm = QuickIntersection(["Article orphelin", self.portail, "Tous les articles dont l'admissibilité est à vérifier"])
+		allOrphans= QuickIntersection(["Article orphelin/Liste complète", self.portail])
+		adm = QuickIntersection(["Article orphelin/Liste complète", self.portail, "Tous les articles dont l'admissibilité est à vérifier"])
 		self.getOldPage()
 		self.count = allOrphans.getPageCount()
 		self.pages = allOrphans.getPages()
-		self.admissibles = []
-		for admissible in adm.getPages():
-			self.admissibles.append(admissible)
+		self.admissibles = adm.getPages()
 		self.subProject = []
 		self.parentProject  = None
 		self.orph = []

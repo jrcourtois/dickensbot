@@ -14,6 +14,8 @@ def addModele(txt, modele):
 	if "Taxobox" in txt:
 		return modele + "\n" + txt
 	for line in tab:
+		if "nfobox" in line:
+			return newTxt + modele + "\n" +"\n".join(tab[l:])
 		if line.startswith("{") and line.endswith("}"):
 			newTxt += line + "\n"
 		else:
