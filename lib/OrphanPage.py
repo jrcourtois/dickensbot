@@ -11,17 +11,22 @@ homo = "Catégorie:Homonymie"
 class OrphanPage(Page):
 	"""An orphan page"""
 
-	def __init__(self, title):
+	def __init__(self, title, parseItl=True):
 		Page.__init__(self, Site.site,title)
-		params = {'action':'query', 'titles' : title, 'prop':'langlinks'}
-		request = api.APIRequest(Site.site, params)
-		result = request.query(False)
 		self.title = title
 		self.interwikiLinks = []
 		self.nblinks = self.__getNbLinks(Site.site, title)
 		self.models = self.__getLinks(Site.site, title, '10')
 		self.itlModels = {}
 		self.itlLinks = {}
+		if (parseItl):
+			self.__initItlLinks()
+
+	def __initItlLinks(self):
+		params = {'action':'query', 'titles' : self.title, 'prop':'langlinks'}
+		request = api.APIRequest(Site.site, params)
+		result = request.query(False)
+
 		for p in result['query']['pages']:
 			if 'langlinks' in list(result['query']['pages'][p].keys()):
 				self.interwikiLinks = result['query']['pages'][p]['langlinks']
@@ -32,17 +37,17 @@ class OrphanPage(Page):
 				self.itlLinks[l['lang']] = self.__getLinks(s, l['*'], '0')
 				self.itlModels[l['lang']] = self.__getLinks(s, l['*'], '10')
 
+
 	def toAdopt(self, nbPage = 2):
-		print (("%s has %d links" % (self.title, self.getNbLinks())))
+		#print (("%s has %d links" % (self.title, self.getNbLinks())))
 		try:
 			if self.getNbLinks() > nbPage:
 				return True
 			if self.isHomo():
-				print((self.title + " is an homonyme page"))
+				print( "%s is an homonyme page" %(self.title))
 				return True
 		except NoPage as e:
-			print("No page found")
-			print((self.title))
+			print("No page found for : %s" % (self.title))
 		return False
 
 	def getNbItlModels(self):

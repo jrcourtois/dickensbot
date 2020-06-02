@@ -11,10 +11,10 @@ adopt_file = open("files/adopte.wiki")
 adopte = adopt_file.readlines()
 i=0
 for l in adopte:
-	i+=1
-	m = re.match(br"# \[\[(.*)\]\]", l)
+	m = re.match(r"# \[\[(.*)\]\]", l)
 	if m:
-		title = m.group(1).decode("utf8")
+		title = m.group(1)
+		print (title)
 		adopted = Page(Site.site, title)
 		oldTxt = adopted.getWikiText()
 		txt = re.sub(r"\{\{[O|o]rph.*?\}\}\n?", "", oldTxt)
@@ -22,9 +22,9 @@ for l in adopte:
 			print ("Bandeau absent")
 		else:
 			try:
-				print (adopted.edit(txt, summary = "Article [[Aide:Jargon_de_Wikipédia#Adopter_un_article_(rechercher)|adopté]] !",bot=True))
+				adopted.edit(txt, summary = "Article [[Aide:Jargon_de_Wikipédia#Adopter_un_article_(rechercher)|adopté]] !",bot=True)
+				i+=1
 			except APIQueryError:
 				print("%s has not been adopted" % title)
-
-
+print ("%d article(s) ont été adopté(s)" % i)
 

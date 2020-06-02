@@ -6,26 +6,31 @@ class Report(object):
 	def __init__(self):
 		self.models_f = open('files/models.wiki', 'w')
 		self.desorphan_f = open("files/adopte.wiki", "w")
+		self.orphan_2_f = open("files/orphan2.wiki", "w")
 
 		self.models = {}
 		self.withModel = 0
 		self.adopted_cnt = 0
+		self.doModels = False
 
 	def parsePage(self, p):
-		page = OrphanPage(p)
+		page = OrphanPage(p, self.doModels)
 		if page.toAdopt():
 			self.adopted_cnt += 1
 			self.desorphan_f.write("# [[" + p + "]]\n") 
 			return
-		if page.getNbItlModels()>0:
-			self.withModel += 1
-			for l in page.itlModels:
-				for model in page.itlModels[l]:
-					key = l + ":" + model["title"]
-					if key in self.models:
-						self.models[key] += [page.title]
-					else:
-						self.models[key] = [page.title]
+		if page.getNbLinks ==2:
+			self.orphan2_f.write("# [[" + p + "]]\n") 
+		if self.doModels:
+			if page.getNbItlModels()>0:
+				self.withModel += 1
+				for l in page.itlModels:
+					for model in page.itlModels[l]:
+						key = l + ":" + model["title"]
+						if key in self.models:
+							self.models[key] += [page.title]
+						else:
+							self.models[key] = [page.title]
 
 	def printReport(self):
 
