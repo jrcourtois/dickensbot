@@ -1,6 +1,6 @@
 #! /bin/bash
 
-export PYTHONPATH=/home/jr/dev/wiki/dickensbot/lib
+export PYTHONPATH=/home/jr/dev/wiki/dickensbot/lib:/home/jr/dev/wiki/wikitools
 
 python3 bot/orphan.py
 python3 bot/adopt.py
