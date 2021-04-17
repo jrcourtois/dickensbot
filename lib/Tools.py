@@ -112,7 +112,7 @@ def setOrphan(p):
 		 ret = "------ NO PORTAIL ----------"
 
 	new = addModele(new, "{{orphelin|date="+getFrenchDate()+"}}")
-	p.edit(new, nocreate="True", summary="article orphelin", bot=True)
+	p.edit(new, nocreate="True", summary="article orphelin, aucun article de l'encyclopédie ne pointe vers lui", bot=True)
 	return ret
 
 def appendCat(page, cat, key):
