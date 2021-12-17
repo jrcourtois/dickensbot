@@ -193,6 +193,7 @@ class ProjectCategory:
 		else:
 			self.oldText = ""
 			self.startCount = -1
+
 	def savePage(self):
 		self.getOrphans()
 		summary = "MAJ: " + str(self.getCount())
@@ -201,6 +202,29 @@ class ProjectCategory:
 		t = ProjectCategory.getBotTxt(self.oldText, to)
 		print(self.projectPage.title)
 		self.projectPage.edit(text=t,summary = summary,bot=True)
+
+	def savePageShort(self):
+		self.getOrphans()
+		summary = "MAJ: " + str(self.getCount())
+
+		s = "{{adoption/intro|" + str(self.getCount()) +  "|" + self.catName + "}}\n"
+		s+= "<!-- start: " + str(self.getStartCount()) + " pages -->\n"
+		s+= "<!-- date(" + self.date + ") -->\n"
+		s+= "{{adoption/orphLast|"+str(len(self.orphLast))+"}}\n"
+		s+= self.getPageArray(self.orphLast)
+		s+= "==== Autres orphelins  ====\n"
+		s+= "{{adoption/orphelins|"+str(len(self.orph))+"}}\n"
+		s+= self.getPageArray(self.orph)
+		s+= "==== Tentative  ====\n"
+		s+= "{{adoption/visited|"+str(len(self.tent))+"}}\n"
+		s+= self.getPageArray(self.tent)
+		s+= "==== Tentatives ce mois-ci ====\n"
+		s+= "{{adoption/visitedLast|"+str(len(self.tentLast))+"}}\n"
+		s+= self.getPageArray(self.tentLast)
+
+		print(summary + " - " + self.catName)
+		print(self.projectPage.title)
+		self.projectPage.edit(text=s,summary = summary,bot=True)
 
 	@staticmethod
 	def getBotTxt(fromTxt, toTxt):

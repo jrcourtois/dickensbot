@@ -60,6 +60,7 @@ class WikiDate :
 
 	def buildPage(self):
 		(self.allKeys, self.allDatas) = self._getArray(QUERY_GAL % (self.y, self.m, self.d))
+		print(QUERY_GAL % (self.y, self.m, self.d))
 
 
 	def _getStringDate(self, d,m,y):

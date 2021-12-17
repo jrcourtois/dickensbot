@@ -7,13 +7,17 @@ This bot take a Palette and add the palette to all the pages that are referenced
 
 parser = argparse.ArgumentParser()
 parser.add_argument("template")
+parser.add_argument("--state", default="")
 args = parser.parse_args()
-
 
 t = args.template
 
 p = ModelPage(t)
-p.parseLinks()
+
+if (args.state != ""):
+    p.parseLinks(["Siège de comté", args.state])
+else:
+    p.parseLinks()
 
 
 
