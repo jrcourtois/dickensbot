@@ -1,6 +1,6 @@
 #! /bin/bash
 
-export PYTHONPATH=/home/jr/dev/wiki/dickensbot/lib:/home/jr/dev/wiki/wikitools
+export PYTHONPATH=/home/jrc/dev/wiki/dickensbot/lib:/home/jrc/dev/wiki/wikitools
 
 echo "Mise à jour de la page de Discussion de JrCourtois - retrait des avertissements de pdd"
 python3 bot/discussion.py

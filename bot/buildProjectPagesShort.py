@@ -7,7 +7,7 @@ from ProjectCategory import ProjectCategory
 from wikitools.page import Page
 
 date = getFrenchDate().replace(" ", "_")
-reDate = re.compile(".*DickensDate\((.+?)\)", re.MULTILINE)
+reDate = re.compile(r".*DickensDate\((.+?)\)", re.MULTILINE)
 
 projets = Page(site, "Utilisateur:DickensBot/Projets-Courts")
 lines = projets.getLinks()

@@ -96,7 +96,6 @@ def getFrenchPage(site, page):
 					pageTitle = l['*']
 				else:
 					pageTitle = l['*'].decode("utf8")
-				print("getFrenchPage : %s" % pageTitle)
 				return Page(Site.site, pageTitle)
 	return None
 def setOrphan(p):
@@ -104,9 +103,11 @@ def setOrphan(p):
 	new = p.getWikiText()
 	if len(new) == 0:
 		return "empty"
-	if new.find("{{en cours}}") > -1:
+	if new.lower().find("{{en cours}}") > -1:
 		return "en cours"
-	if new.find("{{nobots}}") > -1:
+	if new.lower().find("{{en travaux") > -1:
+		return "en travaux"
+	if new.lower().find("{{nobots}}") > -1:
 		return "nobots"
 	if new.lower().find("{{portail") == -1:
 		 ret = "------ NO PORTAIL ----------"
