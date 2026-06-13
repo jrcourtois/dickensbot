@@ -17,7 +17,7 @@ params = {
 	'list':'recentchanges', 
 	'rctype' : 'new',
 	'rcnamespace' : '0', 
-	'rcshow' : '!redirect',
+	'rcshow' : ['!redirect'],
 	'rclimit': COUNT,
 	'rcdir' : 'newer',
 	'rcstart': startStamp}
@@ -38,7 +38,7 @@ for p in result['query']['recentchanges']:
 		print ("Unable to fetch page : %s " % (p['title']))
 		nbError += 1
 		continue
-#	print("%s : %d" % (p['title'], page.getNbLinks()))
+	print("%s : %d" % (p['title'], page.getNbLinks()))
 	if (page.getNbLinks() > 2):
 		nbAdopted += 1
 	elif (page.getNbLinks() > 0):

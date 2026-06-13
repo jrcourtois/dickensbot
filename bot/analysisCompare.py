@@ -130,7 +130,7 @@ def printPageFromLines(page, lines):
 	p.edit(text = ret, summary=str(len(lines)) + " articles à adopter", bot=True)
 	print ("%s : edited, %d lines" %  (page, len(lines)))
 
-YEAR = [2022,2023,2024,2025]
+YEAR = [2023,2024,2025,2026]
 MONTH = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"]
 # orphelins 
 for y in YEAR:

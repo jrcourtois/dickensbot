@@ -3,10 +3,13 @@ import re
 import requests
 import datetime 
 import urllib
+import sys
 
 from wikitools import api
 from wikitools import category
 from Site import site
+from SPARQLWrapper import SPARQLWrapper, JSON
+
 import Tools
 import pprint
 
@@ -15,7 +18,7 @@ MONTH = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "aoû
 
 WEEK = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"]
 
-URL = 'https://query.wikidata.org/bigdata/namespace/wdq/sparql'
+URL = 'https://query.wikidata.org/sparql'
 
 DICTIONNARY = {
 	'P571' : "Création de %s",
@@ -72,8 +75,13 @@ class WikiDate :
 		return "%s %s" % (str(d), MONTH[m-1])
 
 	def _getArray(self, query):
-		pprint.pprint(requests.get(URL, params={'query': query, 'format': 'json'}))
-		data = requests.get(URL, params={'query': query, 'format': 'json'}).json()
+		user_agent = "WDQS-example Python/%s.%s" % (sys.version_info[0], sys.version_info[1])
+		# TODO adjust user agent; see https://w.wiki/CX6
+		sparql = SPARQLWrapper(URL, agent=user_agent)
+		sparql.setQuery(query)
+		sparql.setReturnFormat(JSON)
+		data = sparql.query().convert()
+
 		born = {}
 		keys = []
 		for item in data['results']['bindings']:

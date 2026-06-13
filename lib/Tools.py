@@ -103,7 +103,9 @@ def setOrphan(p):
 	new = p.getWikiText()
 	if len(new) == 0:
 		return "empty"
-	if new.lower().find("{{en cours}}") > -1:
+	if new.lower().find("REDIRECT") > -1:
+		return "redirection"
+	if new.lower().find("{{en cours") > -1:
 		return "en cours"
 	if new.lower().find("{{en travaux") > -1:
 		return "en travaux"
