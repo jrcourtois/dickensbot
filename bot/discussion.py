@@ -55,19 +55,21 @@ for line in lines:
 	i+=1
 	m = re.match(r"#.*\{\{\/prop\|(.*?)\|(.*)\}\}", line)
 	if m:
-		p = Page(site, "Discussion:" + m.group(1) + "/Suppression")
+		t = ("Discussion:" + m.group(1) + "/Admissibilité").replace(" ","_")
+		p = Page(site, t)
+		print(p)
 		txt  = p.getWikiText()
 		suppMatch = re.match(r".*(A|a)rticle supprimé", txt, re.S)
 		if suppMatch:
-			appSupp += "\n#{{/supp|%s|%s|%s}}" % (m.group(1), m.group(2), time.strftime("%d/%m/%Y"))
+			appSupp += "\n#{{/supp2|%s|%s|%s}}" % (m.group(1), m.group(2), time.strftime("%d/%m/%Y"))
 		else:
 			consMatch = re.match(r".*(a|A)rticle cons", txt, re.S)
 			if consMatch:
-				appCons += "\n#{{/cons|%s|%s|%s}}" % (m.group(1), m.group(2), time.strftime("%d/%m/%Y"))
+				appCons += "\n#{{/cons2|%s|%s|%s}}" % (m.group(1), m.group(2), time.strftime("%d/%m/%Y"))
 			else:
 				fusMatch = re.match(r".*(a|A)rticle fusionn", txt, re.S)
 				if fusMatch:
-					appCons += "\n#{{/cons|%s|%s|%s}} (FUSION)" % (m.group(1), m.group(2), time.strftime("%d/%m/%Y"))
+					appCons += "\n#{{/cons2|%s|%s|%s}} (FUSION)" % (m.group(1), m.group(2), time.strftime("%d/%m/%Y"))
 				else:
 					newProps += "\n" + line
 

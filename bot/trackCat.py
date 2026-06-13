@@ -1,44 +1,29 @@
 # -*- coding: utf8 -*-
 from Site import site
-from wikitools import api
 from OrphanPage import OrphanPage
+from QuickIntersection import QuickIntersection
 import Tools
 import urllib.error
 import datetime
 
-COUNT = 400
+intersec = QuickIntersection(["Portail:Phycologie/Articles liés"])
 
-startDay = datetime.date.today() - datetime.timedelta(days=2)
-
-startStamp =  '%sT00:00:00.000Z' % (startDay.isoformat())	
-
-params = {
-	'action':'query', 
-	'list':'recentchanges', 
-	'rctype' : 'new',
-	'rcnamespace' : '0', 
-	'rcshow' : ['!redirect'],
-	'rclimit': COUNT,
-	'rcdir' : 'newer',
-	'rcstart': startStamp}
-
-r = api.APIRequest(site, params)
-result = r.query(False)
+COUNT = float(intersec.getPageCount())
 nbAdopted = 0
 nbLinkAdded = 0
 nbOrphan = 0
 nbError = 0
 i = 0
-for p in result['query']['recentchanges']:
+for p in intersec.getPages():
 	i += 1
 	Tools.printProgress(i, COUNT)
 	try:
-		page = OrphanPage(p['title'])
+		page = OrphanPage(p['page_title'])
 	except urllib.error.HTTPError:
 		print ("Unable to fetch page : %s " % (p['title']))
 		nbError += 1
 		continue
-	print("%s : %d" % (p['title'], page.getNbLinks()))
+#	print("%s : %d" % (p['title'], page.getNbLinks()))
 	if (page.getNbLinks() > 2):
 		nbAdopted += 1
 	elif (page.getNbLinks() > 0):

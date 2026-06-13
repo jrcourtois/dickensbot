@@ -14,6 +14,8 @@ def addModele(txt, modele):
 	if "Taxobox" in txt:
 		return modele + "\n" + txt
 	for line in tab:
+		if "nfobox" in line:
+			return newTxt + modele + "\n" +"\n".join(tab[l:])
 		if line.startswith("{") and line.endswith("}"):
 			newTxt += line + "\n"
 		else:
@@ -94,7 +96,6 @@ def getFrenchPage(site, page):
 					pageTitle = l['*']
 				else:
 					pageTitle = l['*'].decode("utf8")
-				print("getFrenchPage : %s" % pageTitle)
 				return Page(Site.site, pageTitle)
 	return None
 def setOrphan(p):
@@ -102,15 +103,19 @@ def setOrphan(p):
 	new = p.getWikiText()
 	if len(new) == 0:
 		return "empty"
-	if new.find("{{en cours}}") > -1:
+	if new.lower().find("REDIRECT") > -1:
+		return "redirection"
+	if new.lower().find("{{en cours") > -1:
 		return "en cours"
-	if new.find("{{nobots}}") > -1:
+	if new.lower().find("{{en travaux") > -1:
+		return "en travaux"
+	if new.lower().find("{{nobots}}") > -1:
 		return "nobots"
 	if new.lower().find("{{portail") == -1:
 		 ret = "------ NO PORTAIL ----------"
 
 	new = addModele(new, "{{orphelin|date="+getFrenchDate()+"}}")
-	p.edit(new, nocreate="True", summary="article orphelin", bot=True)
+	p.edit(new, nocreate="True", summary="article orphelin, aucun article de l'encyclopédie ne pointe vers lui", bot=True)
 	return ret
 
 def appendCat(page, cat, key):

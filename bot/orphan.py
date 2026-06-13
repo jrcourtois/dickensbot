@@ -37,6 +37,9 @@ for p in pages:
 	except wikitools.exceptions.NoPage:
 		print ("%s: not found" % p.title)
 		continue
+	except KeyError:
+		print ("Exception KeyError")
+		continue
 	p.setPageInfo()
 	if int(p.pageid) < 1:
 		print(("%s : del" % p.title))

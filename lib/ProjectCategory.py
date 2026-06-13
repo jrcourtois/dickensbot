@@ -12,14 +12,12 @@ class ProjectCategory:
 		self.catName = p
 		self.date = date
 		self.portail = "Portail:" + p + "/Articles liés"
-		allOrphans= QuickIntersection(["Article orphelin", self.portail])
-		adm = QuickIntersection(["Article orphelin", self.portail, "Tous les articles dont l'admissibilité est à vérifier"])
+		allOrphans= QuickIntersection(["Article orphelin/Liste complète", self.portail])
+		adm = QuickIntersection(["Article orphelin/Liste complète", self.portail, "Tous les articles dont l'admissibilité est à vérifier"])
 		self.getOldPage()
 		self.count = allOrphans.getPageCount()
 		self.pages = allOrphans.getPages()
-		self.admissibles = []
-		for admissible in adm.getPages():
-			self.admissibles.append(admissible)
+		self.admissibles = adm.getPages()
 		self.subProject = []
 		self.parentProject  = None
 		self.orph = []
@@ -195,6 +193,7 @@ class ProjectCategory:
 		else:
 			self.oldText = ""
 			self.startCount = -1
+
 	def savePage(self):
 		self.getOrphans()
 		summary = "MAJ: " + str(self.getCount())
@@ -203,6 +202,29 @@ class ProjectCategory:
 		t = ProjectCategory.getBotTxt(self.oldText, to)
 		print(self.projectPage.title)
 		self.projectPage.edit(text=t,summary = summary,bot=True)
+
+	def savePageShort(self):
+		self.getOrphans()
+		summary = "MAJ: " + str(self.getCount())
+
+		s = "{{adoption/intro|" + str(self.getCount()) +  "|" + self.catName + "}}\n"
+		s+= "<!-- start: " + str(self.getStartCount()) + " pages -->\n"
+		s+= "<!-- date(" + self.date + ") -->\n"
+		s+= "{{adoption/orphLast|"+str(len(self.orphLast))+"}}\n"
+		s+= self.getPageArray(self.orphLast)
+		s+= "==== Autres orphelins  ====\n"
+		s+= "{{adoption/orphelins|"+str(len(self.orph))+"}}\n"
+		s+= self.getPageArray(self.orph)
+		s+= "==== Tentative  ====\n"
+		s+= "{{adoption/visited|"+str(len(self.tent))+"}}\n"
+		s+= self.getPageArray(self.tent)
+		s+= "==== Tentatives ce mois-ci ====\n"
+		s+= "{{adoption/visitedLast|"+str(len(self.tentLast))+"}}\n"
+		s+= self.getPageArray(self.tentLast)
+
+		print(summary + " - " + self.catName)
+		print(self.projectPage.title)
+		self.projectPage.edit(text=s,summary = summary,bot=True)
 
 	@staticmethod
 	def getBotTxt(fromTxt, toTxt):

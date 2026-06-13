@@ -75,7 +75,7 @@ class ItlPage(Page):
 		phrase = re.sub(r"___L___\s*\*+", "\n | ", phrase)
 		ret += " | liste"
 		ret += cnt
-		ret += " = {{liste éléments"
+		ret += " = {{liste horizontale"
 		ret += self.getLink(phrase,tab)
 		ret += "\n}}\n"
 		return ret
